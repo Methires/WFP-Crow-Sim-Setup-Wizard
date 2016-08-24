@@ -23,5 +23,19 @@ namespace CrowdSimSetupWizard
         {
             InitializeComponent();
         }
+
+        private void Prev_Step_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ChooseActionsWindow actionsWindow = new ChooseActionsWindow();
+            actionsWindow.Show();
+            Close();
+        }
+
+        private void Next_StepButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigureResultsWindow resultsWindow = new ConfigureResultsWindow();
+            resultsWindow.Show();
+            Close();
+        }
     }
 }

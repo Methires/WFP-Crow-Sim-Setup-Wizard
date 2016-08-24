@@ -91,10 +91,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChooseSceneWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ConfigureResultsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,9 +111,6 @@
     </Compile>
     <Compile Include="ChooseScenarioWindow.xaml.cs">
       <DependentUpon>ChooseScenarioWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ChooseSceneWindow.xaml.cs">
-      <DependentUpon>ChooseSceneWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConfigureResultsWindow.xaml.cs">
       <DependentUpon>ConfigureResultsWindow.xaml</DependentUpon>

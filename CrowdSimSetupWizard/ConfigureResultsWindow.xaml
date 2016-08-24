@@ -43,8 +43,8 @@
 
         </Grid>
         <Grid HorizontalAlignment="Left" Height="47" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="499">
-            <Button x:Name="Prev_Step_Button" Content="Back" HorizontalAlignment="Right" Margin="0,10,90,10" VerticalAlignment="Center" Width="75" Height="27"/>
-            <Button x:Name="Run_Button" Content="Run" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Center" Width="75" Height="27"/>
+            <Button x:Name="Prev_Step_Button" Content="Back" HorizontalAlignment="Right" Margin="0,10,90,10" VerticalAlignment="Center" Width="75" Height="27" Click="Prev_Step_Button_Click"/>
+            <Button x:Name="Run_Button" Content="Run" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Center" Width="75" Height="27" Click="Run_Button_Click"/>
         </Grid>
     </Grid>
 </Window>
