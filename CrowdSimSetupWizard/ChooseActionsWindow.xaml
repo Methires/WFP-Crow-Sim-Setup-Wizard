@@ -1,0 +1,30 @@
+﻿<Window x:Class="CrowdSimSetupWizard.ChooseActionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CrowdSimSetupWizard"
+        mc:Ignorable="d"
+        Title="Crowd Simulator Setup" Height="350" Width="525" ResizeMode="CanMinimize">
+    <Grid>
+        <Grid HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="499">
+            <TextBlock x:Name="Top_Header" TextWrapping="Wrap" Text="Choose crowd actions" VerticalAlignment="Center" Margin="10" Height="40" FontSize="25"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="184" Margin="10,75,0,0" VerticalAlignment="Top" Width="499">
+            <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
+            <ListBox x:Name="Animations_List" HorizontalAlignment="Left" Height="149" Margin="10,25,0,0" VerticalAlignment="Top" Width="399">
+                <ListBoxItem Content="Walk"/>
+                <ListBoxItem Content="Run"/>
+                <ListBoxItem Content="Sit"/>
+                <ListBoxItem Content="Wave"/>
+                <ListBoxItem Content="Phone"/>
+            </ListBox>
+            <Button x:Name="Add_Button" Content="Add" Margin="0,25,10,139" HorizontalAlignment="Right" Width="75"/>
+            <Button x:Name="Remove_Button" Content="Remove" Margin="0,50,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="47" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="499">
+            <Button x:Name="Prev_Step_Button" Content="Back" HorizontalAlignment="Right" Margin="0,10,90,10" VerticalAlignment="Center" Width="75" Height="27"/>
+            <Button x:Name="Next_Step_Button" Content="Next" HorizontalAlignment="Right" Margin="0,10,10,10" VerticalAlignment="Center" Width="75" Height="27"/>
+        </Grid>
+    </Grid>
+</Window>
