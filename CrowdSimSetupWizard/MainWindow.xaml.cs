@@ -25,7 +25,7 @@ namespace CrowdSimSetupWizard
             InitializeComponent();
             WizardWindow wizard = new WizardWindow();
             wizard.ShowDialog();
-            //Close();
+            Close();
         }
     }
 }
