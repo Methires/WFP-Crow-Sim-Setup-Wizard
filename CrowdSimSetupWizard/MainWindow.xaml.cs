@@ -23,13 +23,9 @@ namespace CrowdSimSetupWizard
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void Next_Step_Button_Click(object sender, RoutedEventArgs e)
-        {
-            ChooseModelsWindow modelsWindows = new ChooseModelsWindow();
-            modelsWindows.Show();
-            Close();
+            WizardWindow wizard = new WizardWindow();
+            wizard.ShowDialog();
+            //Close();
         }
     }
 }

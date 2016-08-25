@@ -15,26 +15,13 @@ using System.Windows.Shapes;
 namespace CrowdSimSetupWizard
 {
     /// <summary>
-    /// Interaction logic for ConfigureResultsWindow.xaml
+    /// Interaction logic for WizardWindow.xaml
     /// </summary>
-    public partial class ConfigureResultsWindow : Window
+    public partial class WizardWindow : Window
     {
-        public ConfigureResultsWindow()
+        public WizardWindow()
         {
             InitializeComponent();
-        }
-
-        private void Prev_Step_Button_Click(object sender, RoutedEventArgs e)
-        {
-            ChooseScenarioWindow scenarioWindow = new ChooseScenarioWindow();
-            scenarioWindow.Show();
-            Close();
-        }
-
-        private void Run_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-
         }
     }
 }
