@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CrowdSimSetupWizard
 {
@@ -25,6 +13,9 @@ namespace CrowdSimSetupWizard
             InitializeComponent();
             WizardWindow wizard = new WizardWindow();
             wizard.ShowDialog();
+            string project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
+            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", project);
+            System.Diagnostics.Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
             Close();
         }
     }
