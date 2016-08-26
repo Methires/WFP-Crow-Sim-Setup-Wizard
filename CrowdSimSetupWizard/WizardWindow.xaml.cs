@@ -44,7 +44,6 @@ namespace CrowdSimSetupWizard
         public WizardWindow()
         {
             _path = AppDomain.CurrentDomain.BaseDirectory;
-            _modelsFilter = new StringBuilder();
             InitializeComponent();
 
             _data.Tracking = false;
@@ -253,7 +252,7 @@ namespace CrowdSimSetupWizard
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.Filter = "FBX Files (*.fbx)|*.fbx";
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             if (result == true)
             {
@@ -274,6 +273,7 @@ namespace CrowdSimSetupWizard
             {
                 _models.Clear();
             }
+            _modelsFilter = new StringBuilder();
             string modelsPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Characters\\";
             string[] modelsFiles = Directory.GetFiles(modelsPath, "*.fbx", SearchOption.AllDirectories);
             _models = new List<ModelFile>();
@@ -282,8 +282,7 @@ namespace CrowdSimSetupWizard
                 _models.Add(new ModelFile
                 {
                     ModelName = Path.GetFileNameWithoutExtension(modelsFiles[i]),
-                    ModelPath = modelsFiles[i],
-                    CheckBoxName = Path.GetFileNameWithoutExtension(modelsFiles[i]) + "_Checkbox"
+                    ModelPath = modelsFiles[i]
                 });
             }
             Models_List.ItemsSource = _models;
@@ -294,12 +293,12 @@ namespace CrowdSimSetupWizard
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.Filter = "FBX Files (*.fbx)|*.fbx";
-            Nullable<bool> result = dlg.ShowDialog();
+            bool? result = dlg.ShowDialog();
 
             if (result == true)
             {
-                string destPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Characters\\" + Path.GetFileName(dlg.FileName);
-                File.Copy(dlg.FileName, destPath, true);
+                string destPath = string.Format("{0}Unity-CrowdSim-Prototype\\Assets\\Characters\\{1}\\{2}", _path, Path.GetFileNameWithoutExtension(dlg.FileName),Path.GetFileName(dlg.FileName));
+                Directory.CreateDirectory(Path.GetDirectoryName(destPath));
                 GetModelsList();
             }
         }
@@ -357,6 +356,9 @@ namespace CrowdSimSetupWizard
                     }
                 }
                 config.Save(_path + "Unity-CrowdSim-Prototype\\Assets\\config.xml");
+                string project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
+                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", project);
+                Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
             }
             base.OnClosing(e);
         }
