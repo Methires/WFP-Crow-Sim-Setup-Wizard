@@ -43,6 +43,7 @@ namespace CrowdSimSetupWizard
         private string _path;
         private StringBuilder _modelsFilter;
         private StringBuilder _actionsFilter;
+        private string _project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
 
         public WizardWindow()
         {
@@ -224,6 +225,19 @@ namespace CrowdSimSetupWizard
             {
                 string destPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
                 File.Copy(dlg.FileName, destPath, true);
+                int atCounter = Path.GetFileNameWithoutExtension(dlg.FileName).Count(x => x == '@');
+                if(atCounter > 1)
+                {
+                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod ImportWaiter.CloseAfterImporting", _project);
+                    Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
+                    bool waitForImporting = true;
+                    do
+                    {
+                        var unityProcess = Process.GetProcessesByName("Unity");
+                        waitForImporting = unityProcess.Length > 0;
+                    }
+                    while (waitForImporting);
+                }
                 GetAnimationsList();
             }
         }
@@ -358,8 +372,7 @@ namespace CrowdSimSetupWizard
                     }
                 }
                 config.Save(_path + "Unity-CrowdSim-Prototype\\Assets\\config.xml");
-                string project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
-                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", project);
+                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
                 Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
             }
             base.OnClosing(e);
