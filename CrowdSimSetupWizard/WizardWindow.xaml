@@ -9,27 +9,6 @@
         Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize">
     <Grid>
         <xctk:Wizard FinishButtonClosesWindow="True">
-            <xctk:WizardPage x:Name="ActionsPage" 
-                             PageType="Blank"
-                             NextPage="{Binding ElementName=ScenarioPage}"
-                             PreviousPage="{Binding ElementName=ModelsPage}"
-                             HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden">
-                <Grid x:Name="Actions_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
-                    <!--<Button x:Name="Remove_Action_Button" Content="Remove" Margin="0,35,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65"/>-->
-                    <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
-                    <ScrollViewer x:Name="Actions_ScrollView" Margin="0,0,99,20">
-                        <ListBox x:Name="Actions_List" Initialized="Animations_List_Initialized">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
-                    <Button x:Name="Add_Action_Button" Content="Add" Margin="0,10,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Action_Button_Click"/>
-                </Grid>
-            </xctk:WizardPage>
             <xctk:WizardPage x:Name="ScenePage" 
                              PageType="Blank"  
                              CanSelectPreviousPage="False"
@@ -110,6 +89,27 @@
                     </Grid>
                 </Grid>
             </xctk:WizardPage>
+            <xctk:WizardPage x:Name="ActionsPage" 
+                             PageType="Blank"
+                             NextPage="{Binding ElementName=ScenarioPage}"
+                             PreviousPage="{Binding ElementName=ModelsPage}"
+                             HelpButtonVisibility="Hidden"
+                             CancelButtonVisibility="Hidden">
+                <Grid x:Name="Actions_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
+                    <!--<Button x:Name="Remove_Action_Button" Content="Remove" Margin="0,35,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65"/>-->
+                    <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
+                    <ScrollViewer x:Name="Actions_ScrollView" Margin="0,0,99,20">
+                        <ListBox x:Name="Actions_List" Initialized="Animations_List_Initialized">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                    <Button x:Name="Add_Action_Button" Content="Add" Margin="0,10,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Action_Button_Click"/>
+                </Grid>
+            </xctk:WizardPage>
             <xctk:WizardPage x:Name="ScenarioPage"
                              PageType="Blank"
                              NextPage="{Binding ElementName=ResultsPage}"
@@ -134,7 +134,7 @@
                     <Grid x:Name="Scenario_Params" HorizontalAlignment="Left" Height="179" VerticalAlignment="Top" Width="203" Margin="286,83,0,0">
                         <TextBlock x:Name="Instances_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Simultaneous instances:" VerticalAlignment="Top" Margin="10,14,0,0"/>
                         <xctk:IntegerUpDown x:Name="Instances_Value_Picker" Margin="148,10,10,146" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
-                        <TextBlock x:Name="Repeats_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Repeat scenario:" VerticalAlignment="Top" Margin="12,42,0,0"/>
+                        <TextBlock x:Name="Repeats_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Repeat scenario:" VerticalAlignment="Top" Margin="10,42,0,0"/>
                         <xctk:IntegerUpDown x:Name="Repeats_Value_Picker" Margin="148,38,10,118" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
                         <TextBlock x:Name="Tracking_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Only tracking:" VerticalAlignment="Top" Margin="10,125,0,0"/>
                         <TextBlock x:Name="Length_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Session length:" VerticalAlignment="Top" Margin="10,150,0,0"/>
@@ -167,11 +167,20 @@
                             </ListBox>
                         </Grid>
                         <Grid x:Name="Results_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="213" Margin="90,0,0,0">
-                            <TextBlock x:Name="Results_Type_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results type" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="Results_Type_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results type:" VerticalAlignment="Top"/>
                             <StackPanel x:Name="Results_Type_List" HorizontalAlignment="Left" Height="167" Margin="10,21,0,0" VerticalAlignment="Top" Width="193">
                                 <RadioButton x:Name="Type_Sequences" Content="Raw sequences" Checked="Results_Type_Checked"/>
                                 <RadioButton x:Name="Type_Sequences_Boxes" Content="Sequences with bounding boxes" IsChecked="True" Checked="Results_Type_Checked"/>
                             </StackPanel>
+                        </Grid>
+                        <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="308,0,0,0" VerticalAlignment="Top" Width="191">
+                            <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="ScreenWidth_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" Margin="10,25,0,0"/>
+                            <xctk:IntegerUpDown x:Name="Width_Value_Picker" Margin="111,21,10,164" DefaultValue="1920" Minimum="128" Maximum="5120" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <TextBlock x:Name="ScreenHeight_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Height:" VerticalAlignment="Top" Margin="10,53,0,0"/>
+                            <xctk:IntegerUpDown x:Name="Height_Value_Picker" Margin="111,49,10,136" DefaultValue="1080" Minimum="96" Maximum="2160" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate:" VerticalAlignment="Top" Margin="10,81,0,0"/>
+                            <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,77,10,108" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                         </Grid>
                     </Grid>
                 </Grid>

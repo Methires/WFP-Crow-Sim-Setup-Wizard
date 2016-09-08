@@ -35,6 +35,9 @@ namespace CrowdSimSetupWizard
             //Results
             public string ResultsPath;
             public bool BoundingBoxes;
+            public int ScreenWidth;
+            public int ScreenHeight;
+            public int FrameRate;
         }
 
         private static ConfigData _data;
@@ -228,7 +231,7 @@ namespace CrowdSimSetupWizard
                 int atCounter = Path.GetFileNameWithoutExtension(dlg.FileName).Count(x => x == '@');
                 if(atCounter > 1)
                 {
-                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod ImportWaiter.CloseAfterImporting", _project);
+                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
                     Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
                     bool waitForImporting = true;
                     do
@@ -252,10 +255,21 @@ namespace CrowdSimSetupWizard
             if (result == true)
             {
                 string fileName = dlg.FileName;
-                _data.ScenarioFilePath = fileName;
-                Scenario_File_Path.Text = fileName;
-                File_Contents.Text = File.ReadAllText(fileName);
-                ScenarioPage.CanSelectNextPage = true;
+                ScenarioValidator validator = new ScenarioValidator();
+                if (validator.ValidateScenario(fileName))
+                {
+                    _data.ScenarioFilePath = fileName;
+                    Scenario_File_Path.Text = fileName;
+                    File_Contents.Text = File.ReadAllText(fileName);
+                    ScenarioPage.CanSelectNextPage = true;
+                }
+                else
+                {
+                    _data.ScenarioFilePath = "";
+                    Scenario_File_Path.Text = "";
+                    File_Contents.Text = "";
+                    ScenarioPage.CanSelectNextPage = false;
+                }
             }
         }
 
@@ -272,6 +286,18 @@ namespace CrowdSimSetupWizard
             else if (sender.Equals(Repeats_Value_Picker))
             {
                 _data.Repeats = (int)Repeats_Value_Picker.Value;
+            }
+            else if(sender.Equals(Width_Value_Picker))
+            {
+                _data.ScreenWidth = (int)Width_Value_Picker.Value;
+            }
+            else if (sender.Equals(Height_Value_Picker))
+            {
+                _data.ScreenHeight = (int)Height_Value_Picker.Value;
+            }
+            else if (sender.Equals(Framerate_Value_Picker))
+            {
+                _data.FrameRate = (int)Framerate_Value_Picker.Value;
             }
         }
 
@@ -369,6 +395,9 @@ namespace CrowdSimSetupWizard
                     {
                         configElement.ChildNodes[i].Attributes[0].Value = _data.ResultsPath.ToString();
                         configElement.ChildNodes[i].Attributes[1].Value = _data.BoundingBoxes.ToString();
+                        configElement.ChildNodes[i].Attributes[2].Value = _data.ScreenWidth.ToString();
+                        configElement.ChildNodes[i].Attributes[3].Value = _data.ScreenHeight.ToString();
+                        configElement.ChildNodes[i].Attributes[4].Value = _data.FrameRate.ToString();
                     }
                 }
                 config.Save(_path + "Unity-CrowdSim-Prototype\\Assets\\config.xml");

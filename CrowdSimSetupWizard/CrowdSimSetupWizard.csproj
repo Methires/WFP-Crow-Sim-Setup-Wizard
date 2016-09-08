@@ -82,6 +82,12 @@
     </ApplicationDefinition>
     <Compile Include="AnimationFile.cs" />
     <Compile Include="ModelFile.cs" />
+    <Compile Include="Scenario\Data\Action.cs" />
+    <Compile Include="Scenario\Data\Actor.cs" />
+    <Compile Include="Scenario\Data\Blend.cs" />
+    <Compile Include="Scenario\Data\Level.cs" />
+    <Compile Include="Scenario\ScenarioException.cs" />
+    <Compile Include="Scenario\ScenarioValidator.cs" />
     <Compile Include="WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
     </Compile>
