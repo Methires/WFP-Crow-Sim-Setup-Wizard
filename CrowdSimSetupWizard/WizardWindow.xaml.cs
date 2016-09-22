@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -38,39 +39,102 @@ namespace CrowdSimSetupWizard
             public int ScreenWidth;
             public int ScreenHeight;
             public int FrameRate;
+            //Mode
+            public string Mode;
+            //Generation
+            public int SceneSize;
+
+            public void Initialize()
+            {
+                SceneName = "";
+                DayTime = 0;
+                WeatherConditions = 0;
+                //Crowd
+                Models = "";
+                MaxPeople = 0;
+                CrowdActions = "";
+                //Scenario
+                Tracking = false;
+                ScenarioFilePath = "";
+                Length = 0;
+                Repeats = 0;
+                Instances = 0;
+                //Results
+                ResultsPath = "";
+                BoundingBoxes = false;
+                ScreenWidth = 0;
+                ScreenHeight = 0;
+                FrameRate = 0;
+                //Mode
+                Mode = "simulation";
+                //Generation
+                SceneSize = 0; ;
+            }
         }
 
         private static ConfigData _data;
         private List<AnimationFile> _animations;
         private List<ModelFile> _models;
-        private string _path;
+        private List<SceneFile> _scenes;
+        private string _path = AppDomain.CurrentDomain.BaseDirectory;
+        private string _unityPath = "C:\\Program Files\\Unity\\Editor\\Unity.exe";
+        //private string _project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
+        private string _project = AppDomain.CurrentDomain.BaseDirectory + "UnityCrowdSimAndGenerator";
         private StringBuilder _modelsFilter;
         private StringBuilder _actionsFilter;
-        private string _project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
+        
 
         public WizardWindow()
         {
-            _path = AppDomain.CurrentDomain.BaseDirectory;
+            //_path = AppDomain.CurrentDomain.BaseDirectory;
             InitializeComponent();
+            //FindUnity();
+
+            _data.Initialize();
 
             _data.Tracking = false;
             _data.BoundingBoxes = true;
+            
         }
+
+        //private void FindUnity()
+        //{
+        //    string[] probableDirectories = Directory.GetDirectories(@"C:\Program Files\","Unity",SearchOption.AllDirectories);
+        //    foreach (var dir in probableDirectories)
+        //    {
+        //        Directory.GetFiles(dir, "Unity.exe", SearchOption.AllDirectories);
+        //    }
+        //}
 
         private void Scene_List_Checked(object sender, RoutedEventArgs e)
         {
-            if (sender.Equals(Square))
+            System.Windows.Controls.RadioButton action = sender as System.Windows.Controls.RadioButton;
+            string sceneName = action.Content.ToString();
+            _data.SceneName = sceneName;
+            LoadScenePreviewImage(sceneName);
+        }
+
+        private void LoadScenePreviewImage(string sceneName)
+        {
+            string scenePreviewImagePath = GetScenePreviewPath(sceneName);
+            Uri scenePreviewImageUri = new Uri(scenePreviewImagePath);
+            BitmapImage previewImage = new BitmapImage(scenePreviewImageUri);
+            Scene_Preview_Image.Stretch = System.Windows.Media.Stretch.Fill;
+            Scene_Preview_Image.Source = previewImage;
+        }
+
+        private string GetScenePreviewPath(string sceneName)
+        {
+            string scenesPath = _project +" \\Assets\\Scenes\\";
+            string[] scenePreviewFiles = Directory.GetFiles(scenesPath, sceneName + ".png", SearchOption.AllDirectories);
+            if (scenePreviewFiles.Length != 0)
             {
-                _data.SceneName = "Crowd Simulator Prototype";
+                return scenePreviewFiles[0];
             }
-            else if (sender.Equals(Obstacles))
+            else
             {
-                _data.SceneName = "Scene with obstacles";
-            }
-            else if (sender.Equals(City))
-            {
-                _data.SceneName = "City like scene";
-            }
+                return  _project + "\\Assets\\Scenes\\noImage.png";
+            }             
         }
 
         private void Day_Time_Checked(object sender, RoutedEventArgs e)
@@ -127,11 +191,40 @@ namespace CrowdSimSetupWizard
             GetModelsList();
         }
 
+        private void LoadModelPreviewImage(string modelName)
+        {
+            string modelPreviewImagePath = GetModelPreviewPath(modelName);
+            Uri modelPreviewImageUri = new Uri(modelPreviewImagePath);
+            BitmapImage previewImage = new BitmapImage(modelPreviewImageUri);
+            Model_Preview_Image.Source = previewImage;
+        }
 
+        private string GetModelPreviewPath(string modelName)
+        {
+            string modelsPath = _project + "\\Assets\\Characters\\";
+            string[] modelPreviewFiles = Directory.GetFiles(modelsPath, modelName + ".png", SearchOption.AllDirectories);
+            if (modelPreviewFiles.Length != 0)
+            {
+                return modelPreviewFiles[0];
+            }
+            else
+            {
+                return _project + "\\Assets\\Scenes\\noImage.png";
+            }
+        }
+
+        private void Models_List_Selected(object sender, RoutedEventArgs e)
+        {
+           System.Windows.Controls.ListBox modelsList = sender as System.Windows.Controls.ListBox;
+            if ((ModelFile)modelsList.SelectedItem !=null)
+            {
+                LoadModelPreviewImage(((ModelFile)modelsList.SelectedItem).ModelName);
+            }           
+        }
 
         private void Models_CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.CheckBox model = sender as System.Windows.Controls.CheckBox;
+            System.Windows.Controls.CheckBox model = sender as System.Windows.Controls.CheckBox;            
             if ((bool)model.IsChecked)
             {
                 _modelsFilter.Append("|" + model.Content);
@@ -142,6 +235,68 @@ namespace CrowdSimSetupWizard
             }
         }
 
+        private void Load_Scene_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+
+            dlg.Filter = "FBX Files (*.unity)|*.unity";
+            bool? result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                string destPath = string.Format("{0}\\Assets\\Scenes\\{1}", _project, Path.GetFileName(dlg.FileName));
+                Directory.CreateDirectory(Path.GetDirectoryName(destPath));
+
+                if (!File.Exists(destPath))
+                {
+                    File.Copy(dlg.FileName, destPath);
+
+                    string previewPath = Path.GetDirectoryName(dlg.FileName) + "\\" + Path.GetFileNameWithoutExtension(dlg.FileName) + ".png";
+
+                    if (File.Exists(previewPath))
+                    {
+                        string destPreviewpath = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileNameWithoutExtension(destPath) + ".png";
+                        File.Copy(previewPath, destPreviewpath);
+                    }
+                }                                  
+                GetScenesList();
+            }
+        }
+
+        private void Generate_Scene_Button_Click(object sender, RoutedEventArgs e)
+        {
+            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
+            _data.Mode = "generation";
+            PrepareConfigFile();
+            
+            Process.Start(_unityPath, command);
+            SceneBusyIndicator.IsBusy = true;
+            SceneBusyIndicator.BusyContent = "Generating scene...";
+            BackgroundWorker unitySpy = new BackgroundWorker();
+
+            unitySpy.DoWork += (o, ea) =>
+            {
+                bool waitForGeneration = true;
+                do
+                {
+                    var unityProcess = Process.GetProcessesByName("Unity");
+                    waitForGeneration = unityProcess.Length > 0;
+                    
+                }
+                while (waitForGeneration);
+            };
+
+            unitySpy.RunWorkerCompleted += (o, ea) =>
+            {
+                SceneBusyIndicator.IsBusy = false;
+                GetScenesList();
+            };
+
+            unitySpy.RunWorkerAsync();                        
+        }
+
+
+
         private void Add_Model_Button_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -151,10 +306,13 @@ namespace CrowdSimSetupWizard
 
             if (result == true)
             {
-                string destPath = string.Format("{0}Unity-CrowdSim-Prototype\\Assets\\Characters\\{1}\\{2}", _path, Path.GetFileNameWithoutExtension(dlg.FileName), Path.GetFileName(dlg.FileName));
+                string destPath = string.Format("{0}\\Assets\\Characters\\{1}\\{2}", _project, Path.GetFileNameWithoutExtension(dlg.FileName), Path.GetFileName(dlg.FileName));
                 Directory.CreateDirectory(Path.GetDirectoryName(destPath));
+                File.Copy(dlg.FileName, destPath);
+                InitializeUnityImport(ModelsBusyIndicator, "Importing model...");
                 GetModelsList();
             }
+
         }
 
         private void GetModelsList()
@@ -164,7 +322,7 @@ namespace CrowdSimSetupWizard
                 _models.Clear();
             }
             _modelsFilter = new StringBuilder();
-            string modelsPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Characters\\";
+            string modelsPath = _project + "\\Assets\\Characters\\";
             string[] modelsFiles = Directory.GetFiles(modelsPath, "*.fbx", SearchOption.AllDirectories);
             _models = new List<ModelFile>();
             for (int i = 0; i < modelsFiles.Length; i++)
@@ -183,6 +341,39 @@ namespace CrowdSimSetupWizard
             GetAnimationsList();
         }
 
+        private void Scenes_List_Initialized(object sender, EventArgs e)
+        {
+            GetScenesList();
+        }
+         
+        private void GetScenesList()
+        {
+            if (_scenes != null)
+            {
+                _scenes.Clear();
+            }
+            //_actionsFilter = new StringBuilder();
+            string scenesPath = _project + "\\Assets\\Scenes\\";
+            string[] sceneFiles = Directory.GetFiles(scenesPath, "*.unity", SearchOption.AllDirectories);
+            for (int i = 0; i < sceneFiles.Length; i++)
+            {
+                sceneFiles[i] = Path.GetFileNameWithoutExtension(sceneFiles[i]);
+            }
+            _scenes = new List<SceneFile>();
+            for (int i = 0; i < sceneFiles.Length; i++)
+            {
+                SceneFile newScene = new SceneFile() { FileName = sceneFiles[i], IsFirst = i == 0 };
+
+                if (newScene.IsFirst)
+                {
+                    LoadScenePreviewImage(newScene.FileName);
+                }
+
+                _scenes.Add(newScene);
+            }
+            Scenes_List.ItemsSource = _scenes;
+        }
+
         private void GetAnimationsList()
         {
             if (_animations != null)
@@ -190,7 +381,7 @@ namespace CrowdSimSetupWizard
                 _animations.Clear();
             }
             _actionsFilter = new StringBuilder();  
-            string animationsPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Resources\\Animations\\";
+            string animationsPath = _project + "\\Assets\\Resources\\Animations\\";
             string[] animationFiles = Directory.GetFiles(animationsPath, "*.fbx", SearchOption.AllDirectories);
             for (int i = 0; i < animationFiles.Length; i++)
             {
@@ -206,7 +397,7 @@ namespace CrowdSimSetupWizard
 
         private void Actions_CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.CheckBox action = sender as System.Windows.Controls.CheckBox;
+            System.Windows.Controls.CheckBox action = sender as System.Windows.Controls.CheckBox;           
             if ((bool)action.IsChecked)
             {
                 _actionsFilter.Append("|" + action.Content);
@@ -226,23 +417,49 @@ namespace CrowdSimSetupWizard
 
             if (result == true)
             {
-                string destPath = _path + "Unity-CrowdSim-Prototype\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
-                File.Copy(dlg.FileName, destPath, true);
                 int atCounter = Path.GetFileNameWithoutExtension(dlg.FileName).Count(x => x == '@');
-                if(atCounter > 1)
-                {
-                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
-                    Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
-                    bool waitForImporting = true;
-                    do
-                    {
-                        var unityProcess = Process.GetProcessesByName("Unity");
-                        waitForImporting = unityProcess.Length > 0;
-                    }
-                    while (waitForImporting);
+                if (atCounter > 0)
+                { 
+                    string destPath = _project + "\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
+                    File.Copy(dlg.FileName, destPath, true);     
+                    InitializeUnityImport(ActionsBusyIndicator, "Importing action...");
+                    GetAnimationsList();
                 }
-                GetAnimationsList();
+                else
+                {
+                    System.Windows.MessageBox.Show("Animation file has invalid name.\n '@' symbol must separate mocap actor id from action name.","Invalid file name",MessageBoxButton.OK);
+                }
+                
             }
+        }
+
+        private void InitializeUnityImport(Xceed.Wpf.Toolkit.BusyIndicator busyIndicator, string busyMessage)
+        {
+            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
+            Process.Start(_unityPath, command);
+
+            busyIndicator.IsBusy = true;
+            busyIndicator.BusyContent = busyMessage;
+            BackgroundWorker unitySpy = new BackgroundWorker();
+
+            unitySpy.DoWork += (o, ea) =>
+            {
+                bool waitForGeneration = true;
+                do
+                {
+                    var unityProcess = Process.GetProcessesByName("Unity");
+                    waitForGeneration = unityProcess.Length > 0;
+
+                }
+                while (waitForGeneration);
+            };
+
+            unitySpy.RunWorkerCompleted += (o, ea) =>
+            {
+                busyIndicator.IsBusy = false;               
+            };
+
+            unitySpy.RunWorkerAsync();
         }
 
         private void Choose_Scenario_Button_Click(object sender, RoutedEventArgs e)
@@ -359,52 +576,69 @@ namespace CrowdSimSetupWizard
             //NO YET IMPLEMENTED IN UNITY PROJECT
         }
 
+        private void PrepareConfigFile()
+        {
+            _data.Models = _modelsFilter.ToString();
+            _data.CrowdActions = _actionsFilter.ToString();
+            string configPath = _project + "\\Assets\\config.xml";
+            XmlDocument config = new XmlDocument();
+            config.Load(configPath);
+            XmlElement configElement = config.DocumentElement;
+            for (int i = 0; i < configElement.ChildNodes.Count; i++)
+            {
+                if (configElement.ChildNodes[i].Name == "scene")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.SceneName;
+                    configElement.ChildNodes[i].Attributes[1].Value = _data.DayTime.ToString();
+                    configElement.ChildNodes[i].Attributes[2].Value = _data.WeatherConditions.ToString();
+                }
+                else if (configElement.ChildNodes[i].Name == "crowd")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.Models;
+                    configElement.ChildNodes[i].Attributes[1].Value = _data.MaxPeople.ToString();
+                    configElement.ChildNodes[i].Attributes[2].Value = _data.CrowdActions.ToString();
+                }
+                else if (configElement.ChildNodes[i].Name == "simulation")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.Tracking.ToString();
+                    configElement.ChildNodes[i].Attributes[1].Value = _data.Tracking ? "" : _data.ScenarioFilePath.ToString();
+                    configElement.ChildNodes[i].Attributes[2].Value = _data.Length.ToString();
+                    configElement.ChildNodes[i].Attributes[3].Value = _data.Repeats.ToString();
+                    configElement.ChildNodes[i].Attributes[4].Value = _data.Instances.ToString();
+                }
+                else if (configElement.ChildNodes[i].Name == "results")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.ResultsPath.ToString();
+                    configElement.ChildNodes[i].Attributes[1].Value = _data.BoundingBoxes.ToString();
+                    configElement.ChildNodes[i].Attributes[2].Value = _data.ScreenWidth.ToString();
+                    configElement.ChildNodes[i].Attributes[3].Value = _data.ScreenHeight.ToString();
+                    configElement.ChildNodes[i].Attributes[4].Value = _data.FrameRate.ToString();
+                }
+                else if (configElement.ChildNodes[i].Name == "mode")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.Mode;
+                }
+                else if (configElement.ChildNodes[i].Name == "generation")
+                {
+                    configElement.ChildNodes[i].Attributes[0].Value = _data.SceneSize.ToString();
+                }
+            }
+            config.Save(configPath);
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             bool wasCodeClosed = new StackTrace().GetFrames().FirstOrDefault(x => x.GetMethod() == typeof(Window).GetMethod("Close")) != null;
             if (wasCodeClosed)
             {
-                _data.Models = _modelsFilter.ToString();
-                _data.CrowdActions = _actionsFilter.ToString();
-                XmlDocument config = new XmlDocument();
-                config.Load(_path + "Unity-CrowdSim-Prototype\\Assets\\config.xml");
-                XmlElement configElement = config.DocumentElement;
-                for (int i = 0; i < configElement.ChildNodes.Count; i++)
-                {
-                    if (configElement.ChildNodes[i].Name == "scene")
-                    {
-                        configElement.ChildNodes[i].Attributes[0].Value = _data.SceneName;
-                        configElement.ChildNodes[i].Attributes[1].Value = _data.DayTime.ToString();
-                        configElement.ChildNodes[i].Attributes[2].Value = _data.WeatherConditions.ToString();
-                    }
-                    else if (configElement.ChildNodes[i].Name == "crowd")
-                    {
-                        configElement.ChildNodes[i].Attributes[0].Value = _data.Models;
-                        configElement.ChildNodes[i].Attributes[1].Value = _data.MaxPeople.ToString();
-                        configElement.ChildNodes[i].Attributes[2].Value = _data.CrowdActions.ToString();
-                    }
-                    else if (configElement.ChildNodes[i].Name == "simulation")
-                    {
-                        configElement.ChildNodes[i].Attributes[0].Value = _data.Tracking.ToString();
-                        configElement.ChildNodes[i].Attributes[1].Value = _data.Tracking? "" :_data.ScenarioFilePath.ToString();                     
-                        configElement.ChildNodes[i].Attributes[2].Value = _data.Length.ToString();
-                        configElement.ChildNodes[i].Attributes[3].Value = _data.Repeats.ToString();
-                        configElement.ChildNodes[i].Attributes[4].Value = _data.Instances.ToString();
-                    }
-                    else if (configElement.ChildNodes[i].Name == "results")
-                    {
-                        configElement.ChildNodes[i].Attributes[0].Value = _data.ResultsPath.ToString();
-                        configElement.ChildNodes[i].Attributes[1].Value = _data.BoundingBoxes.ToString();
-                        configElement.ChildNodes[i].Attributes[2].Value = _data.ScreenWidth.ToString();
-                        configElement.ChildNodes[i].Attributes[3].Value = _data.ScreenHeight.ToString();
-                        configElement.ChildNodes[i].Attributes[4].Value = _data.FrameRate.ToString();
-                    }
-                }
-                config.Save(_path + "Unity-CrowdSim-Prototype\\Assets\\config.xml");
+                _data.Mode = "simulation";
+                PrepareConfigFile();
                 string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
-                Process.Start("C:\\Program Files\\Unity\\Editor\\Unity.exe", command);
+                Process.Start(_unityPath, command);
             }
             base.OnClosing(e);
         }
+
+
     }
 }
