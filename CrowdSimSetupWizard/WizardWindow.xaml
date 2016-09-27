@@ -187,13 +187,16 @@
                             </StackPanel>
                         </Grid>
                         <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">
-                            <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top"/>
-                            <TextBlock x:Name="ScreenWidth_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" Margin="10,25,0,0"/>
+                            <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top" Margin="0,4,0,0" FontWeight="Bold"/>
+                            <TextBlock x:Name="ScreenWidth_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" Margin="30,25,0,0"/>
                             <xctk:IntegerUpDown x:Name="Width_Value_Picker" Margin="111,21,10,164" DefaultValue="1920" Minimum="128" Maximum="5120" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
-                            <TextBlock x:Name="ScreenHeight_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Height:" VerticalAlignment="Top" Margin="10,53,0,0"/>
+                            <TextBlock x:Name="ScreenHeight_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Height:" VerticalAlignment="Top" Margin="30,53,0,0"/>
                             <xctk:IntegerUpDown x:Name="Height_Value_Picker" Margin="111,49,10,136" DefaultValue="1080" Minimum="96" Maximum="2160" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
-                            <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate:" VerticalAlignment="Top" Margin="10,81,0,0"/>
-                            <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,77,10,108" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate:" VerticalAlignment="Top" Margin="0,112,0,0"/>
+                            <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
+                            <xctk:IntegerUpDown x:Name="Buffer_Size_Value_Picker" Margin="111,136,10,49" DefaultValue="500" Minimum="1" Maximum="2000" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+
                         </Grid>
                     </Grid>
                 </Grid>
@@ -223,11 +226,13 @@
 
                         <Label x:Name="statusLabel" Content="Simulation status: " Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="framesCountLabel" Content="Frames count:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                        <Label x:Name="repeatsLabel" Content="Repeats:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="repeatsLabel" Content="Repeats:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="memLabel" Content="Memory used:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
 
+                        <Label x:Name="memValueLabel" Content="0 MB" Grid.Column="1" HorizontalAlignment="Left" Margin="129,93,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="statusValueLabel" Content="Ready" Grid.Column="1" HorizontalAlignment="Left" Margin="129,10,0,0" VerticalAlignment="Top" Width="120" />
                         <Label x:Name="framesCountValueLabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,41,0,0" VerticalAlignment="Top" Width="120"/>
-                        <Label x:Name="repeatsValueabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,72,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Label x:Name="repeatsValueabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,67,0,0" VerticalAlignment="Top" Width="120"/>
 
 
                     </Grid>

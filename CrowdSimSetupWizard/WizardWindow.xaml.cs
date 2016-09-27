@@ -42,37 +42,11 @@ namespace CrowdSimSetupWizard
             public int ScreenWidth;
             public int ScreenHeight;
             public int FrameRate;
+            public int BufferSize;
             //Mode
             public string Mode;
             //Generation
             public int SceneSize;
-
-            //public void Initialize()
-            //{
-            //    SceneName = "";
-            //    DayTime = 0;
-            //    WeatherConditions = 0;
-            //    //Crowd
-            //    Models = "";
-            //    MaxPeople = 0;
-            //    CrowdActions = "";
-            //    //Scenario
-            //    Tracking = false;
-            //    ScenarioFilePath = "";
-            //    Length = 0;
-            //    Repeats = 0;
-            //    Instances = 0;
-            //    //Results
-            //    ResultsPath = "";
-            //    BoundingBoxes = false;
-            //    ScreenWidth = 0;
-            //    ScreenHeight = 0;
-            //    FrameRate = 0;
-            //    //Mode
-            //    Mode = "simulation";
-            //    //Generation
-            //    SceneSize = 0; ;
-            //}
         }
 
         private void InitializeData()
@@ -89,13 +63,14 @@ namespace CrowdSimSetupWizard
             _data.ScenarioFilePath = "";
             _data.Length = (int)Length_Value_Picker.Value;
             _data.Repeats = (int)Repeats_Value_Picker.Value;
-            _data.Instances = (int)Instances_Value_Picker.Value;
+            _data.Instances = (int)Instances_Value_Picker.Value;          
             //Results
             _data.ResultsPath = "";
             _data.BoundingBoxes = false;
             _data.ScreenWidth = (int)Width_Value_Picker.Value;
             _data.ScreenHeight = (int)Height_Value_Picker.Value;
             _data.FrameRate = (int)Framerate_Value_Picker.Value;
+            _data.BufferSize = (int)Buffer_Size_Value_Picker.Value;
             //Mode
             _data.Mode = "simulation";
             //Generation
@@ -594,6 +569,10 @@ namespace CrowdSimSetupWizard
             {
                 _data.SceneSize = (int)Scene_Size_Value_Picker.Value;
             }
+            else if (sender.Equals(Buffer_Size_Value_Picker))
+            {
+                _data.BufferSize = (int)Buffer_Size_Value_Picker.Value;
+            }
         }
 
         private void Tracking_CheckBox_Click(object sender, RoutedEventArgs e)
@@ -689,6 +668,7 @@ namespace CrowdSimSetupWizard
                     configElement.ChildNodes[i].Attributes[2].Value = _data.ScreenWidth.ToString();
                     configElement.ChildNodes[i].Attributes[3].Value = _data.ScreenHeight.ToString();
                     configElement.ChildNodes[i].Attributes[4].Value = _data.FrameRate.ToString();
+                    configElement.ChildNodes[i].Attributes[5].Value = _data.BufferSize.ToString();
                 }
                 else if (configElement.ChildNodes[i].Name == "mode")
                 {
@@ -777,13 +757,28 @@ namespace CrowdSimSetupWizard
             statusValueLabel.Content = "Running...";
             statusValueLabel.Foreground = System.Windows.Media.Brushes.DarkOrange;
             _screenshotDirInfo = EarliestDirectory();
+            memValueLabel.Content = GetUnityMemoryUsage() + " MB";
+
             if (_screenshotDirInfo != null)
             {
                 repeatsValueabel.Content = SubdirectoriesCount(_screenshotDirInfo).ToString();
                 DirectoryInfo earliestRepeat = EarliestSubdirectory(_screenshotDirInfo);
-                framesCountValueLabel.Content = ScreenshotCount(earliestRepeat);
+                framesCountValueLabel.Content = ScreenshotCount(earliestRepeat);                
                 GeneratedFilesTextBlock.Text = GetFilesList(earliestRepeat);
             }            
+        }
+
+        private int GetUnityMemoryUsage()
+        {
+            int memUsage = 0;
+            Process[] unityProcessess = Process.GetProcessesByName("Unity");
+            if (unityProcessess.Length > 0)
+            {
+                var mem = unityProcessess[0].WorkingSet64;
+                memUsage = (int)(mem / 1048576);
+            }
+
+            return memUsage;
         }
 
         private void ResetInfo()
