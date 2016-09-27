@@ -8,7 +8,126 @@
         mc:Ignorable="d"
         Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize">
     <Grid>
-        <xctk:Wizard FinishButtonClosesWindow="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="391*"/>
+            <ColumnDefinition Width="128*"/>
+        </Grid.ColumnDefinitions>
+        <xctk:Wizard FinishButtonClosesWindow="True" Grid.ColumnSpan="2">
+            <xctk:WizardPage x:Name="ScenePage" 
+                             PageType="Blank"  
+                             CanSelectPreviousPage="False"
+                             NextPage="{Binding ElementName=ModelsPage}"
+                             HelpButtonVisibility="Hidden"
+                             CancelButtonVisibility="Hidden">
+                <xctk:BusyIndicator x:Name="SceneBusyIndicator">
+                    <Grid x:Name="Scene_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
+                        <Grid x:Name="Scene_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="379">
+                            <Grid x:Name="Scene_Preview" Margin="208,0,10,60">
+                                <Border x:Name="Scene_Preview_Border" BorderBrush="Black" BorderThickness="2" ScrollViewer.CanContentScroll="True">
+                                    <Image x:Name="Scene_Preview_Image" HorizontalAlignment="Right" Height="202" VerticalAlignment="Top" Width="161" Stretch="Fill"/>
+                                </Border>
+                            </Grid>
+
+                            <ScrollViewer x:Name="Scenes_ScrollView" Margin="0,0,246,60" CanContentScroll="True">
+                                <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <RadioButton Content="{Binding FileName}" IsChecked="{Binding IsFirst}" GroupName="FakoGroup"  Checked="Scene_List_Checked"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                            <Button x:Name="Load_Scene_Button" Content="Load" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Load_Scene_Button_Click"/>
+                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,35,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
+                            <!--ScenePreview was here-->
+                            <xctk:IntegerUpDown x:Name="Scene_Size_Value_Picker" Margin="138,91,176,148" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
+                            <Grid x:Name="Crowd_Size" HorizontalAlignment="Left" Height="55" VerticalAlignment="Bottom" Width="379">
+                                <Slider x:Name="Crowd_Size_Slider" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="310" Minimum="1" Maximum="500" Value="1" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="Crowd_Size_Slider_ValueChanged"/>
+                                <TextBlock x:Name="Slider_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Crowd size:" VerticalAlignment="Top" Width="65"/>
+                                <TextBlock x:Name="Size_Small" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Small" VerticalAlignment="Top" Width="20" Margin="10,39,0,0" FontSize="8"/>
+                                <TextBlock x:Name="Size_Medium" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Medium" VerticalAlignment="Top" Width="31" Margin="145,39,0,0" FontSize="8"/>
+                                <TextBlock x:Name="Size_Large" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Large" VerticalAlignment="Top" Width="20" Margin="300,39,0,0" FontSize="8"/>
+                                <TextBlock x:Name="Crowd_Number_Presentation" HorizontalAlignment="Right" Height="18" Margin="0,21,10,11" TextWrapping="Wrap" Text="1" VerticalAlignment="Center" Width="27" TextAlignment="Center"/>
+                            </Grid>
+                            <Label x:Name="Scene_Size_Label" Content="Scene size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="138,60,0,0"/>
+                        </Grid>
+                        <Grid x:Name="Scene_Conditions" HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="115">
+                            <TextBlock x:Name="Scene_Conditions_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Conditions" VerticalAlignment="Top" Width="95" Margin="10,0,0,0"/>
+                            <Grid x:Name="Day_Time" HorizontalAlignment="Left" Height="63" Margin="0,21,0,0" VerticalAlignment="Top" Width="105">
+                                <TextBlock x:Name="Day_Time_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Time" VerticalAlignment="Top" FontSize="10"/>
+                                <StackPanel x:Name="Day_Time_List" Margin="10,18,10,0">
+                                    <RadioButton x:Name="Morning" Content="Morning" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="Day_Time_Checked"/>
+                                    <RadioButton x:Name="Noon" Content="Noon" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Day_Time_Checked"/>
+                                    <RadioButton x:Name="Afternoon" Content="Afternoon" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Day_Time_Checked"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="Weather_Conditions" HorizontalAlignment="Left" Height="95" VerticalAlignment="Bottom" Width="105" Margin="0,0,0,26">
+                                <TextBlock x:Name="Weather_Conditions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Weather" VerticalAlignment="Top" FontSize="10"/>
+                                <StackPanel x:Name="Weather_Conditions_List" Margin="10,18,10,0">
+                                    <RadioButton x:Name="Sun" Content="Sun" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="Weather_Conditions_Checked"/>
+                                    <RadioButton x:Name="Rain" Content="Rain" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
+                                    <RadioButton x:Name="Snow" Content="Snow" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
+                                    <RadioButton x:Name="Overcast" Content="Overcast" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
+                                    <RadioButton x:Name="Fog" Content="Fog" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </xctk:BusyIndicator>
+            </xctk:WizardPage>
+            <xctk:WizardPage x:Name="ModelsPage" 
+                             PageType="Blank"
+                             NextPage="{Binding ElementName=ActionsPage}"
+                             PreviousPage="{Binding ElementName=ScenePage}"
+                             HelpButtonVisibility="Hidden"
+                             CancelButtonVisibility="Hidden">
+                <xctk:BusyIndicator x:Name="ModelsBusyIndicator">
+                    <Grid x:Name="Models_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
+                        <Grid x:Name="Model_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="310">
+                            <!-- <Button x:Name="Remove_Model_Button" Content="Remove" Margin="235,35,10,0" VerticalAlignment="Top" Width="65"/>-->
+                            <TextBlock x:Name="Models_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Models:" VerticalAlignment="Top"/>
+                            <ScrollViewer x:Name="Models_ScrollView" Margin="0,0,90,10">
+                                <ListBox x:Name="Models_List" Initialized="Models_List_Initialized" SelectionChanged="Models_List_Selected">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Content="{Binding ModelName}" Click="Models_CheckBox_Click"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                            <Button x:Name="Add_Model_Button" Content="Add" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Model_Button_Click"/>
+                        </Grid>
+                        <Grid x:Name="Models_3DPreview"  HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="185" Margin="0,0,10,10">
+                            <Border x:Name="Model_Preview" BorderBrush="Black" BorderThickness="2"  Margin="0,0,10,10"/>
+                            <Image x:Name="Model_Preview_Image"  HorizontalAlignment="Right" Height="258" VerticalAlignment="Top" Width="181" Margin="2,2,12,12" Stretch="Fill"/>
+                            <Border/>
+                        </Grid>
+                    </Grid>
+                </xctk:BusyIndicator>
+            </xctk:WizardPage>
+            <xctk:WizardPage x:Name="ActionsPage" 
+                             PageType="Blank"
+                             NextPage="{Binding ElementName=ScenarioPage}"
+                             PreviousPage="{Binding ElementName=ModelsPage}"
+                             HelpButtonVisibility="Hidden"
+                             CancelButtonVisibility="Hidden">
+                <xctk:BusyIndicator x:Name="ActionsBusyIndicator">
+                    <Grid x:Name="Actions_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
+                        <!--<Button x:Name="Remove_Action_Button" Content="Remove" Margin="0,35,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65"/>-->
+                        <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
+                        <ScrollViewer x:Name="Actions_ScrollView" Margin="0,0,99,20">
+                            <ListBox x:Name="Actions_List" Initialized="Animations_List_Initialized">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                        <Button x:Name="Add_Action_Button" Content="Add" Margin="0,10,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Action_Button_Click"/>
+                    </Grid>
+                </xctk:BusyIndicator>
+            </xctk:WizardPage>
             <xctk:WizardPage x:Name="ScenarioPage"
                              PageType="Blank"
                              NextPage="{Binding ElementName=ResultsPage}"
@@ -43,140 +162,14 @@
                 </Grid>
 
             </xctk:WizardPage>
-            <xctk:WizardPage x:Name="ScenePage" 
-                             PageType="Blank"  
-                             CanSelectPreviousPage="False"
-                             NextPage="{Binding ElementName=ModelsPage}"
-                             HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="SceneBusyIndicator">
-                    <Grid x:Name="Scene_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
-                        <Grid x:Name="Scene_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="379">
-                        
-                            <Grid x:Name="Scene_Preview" Margin="208,0,10,60">
-                                <Border x:Name="Scene_Preview_Border" BorderBrush="Black" BorderThickness="2">
-                                    <Image x:Name="Scene_Preview_Image" HorizontalAlignment="Right" Height="202" VerticalAlignment="Top" Width="161" />
-                                </Border>
-                            </Grid>
-                        
-                            <ScrollViewer x:Name="Scenes_ScrollView" Margin="0,0,246,60">
-                               <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <RadioButton Content="{Binding FileName}" IsChecked="{Binding IsFirst}" GroupName="FakoGroup"  Checked="Scene_List_Checked"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                                <!--ListBox x:Name="Scenes_List">
-                                    <RadioButton x:Name="Square" Content="Simple Square" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="Scene_List_Checked"/>
-                                    <RadioButton x:Name="Obstacles" Content="Simple Obstacles" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Scene_List_Checked"/>
-                                    <RadioButton x:Name="City" Content="City" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Scene_List_Checked"/>
-                                </-->
-                            </ScrollViewer>
-                            <Button x:Name="Load_Scene_Button" Content="Load" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Load_Scene_Button_Click"/>
-                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,35,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
-                            <!--ScenePreview was here-->
-                            <Grid x:Name="Crowd_Size" HorizontalAlignment="Left" Height="55" VerticalAlignment="Bottom" Width="379">
-                                <Slider x:Name="Crowd_Size_Slider" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="310" Minimum="1" Maximum="500" Value="1" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="Crowd_Size_Slider_ValueChanged"/>
-                                <TextBlock x:Name="Slider_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Crowd size:" VerticalAlignment="Top" Width="65"/>
-                                <TextBlock x:Name="Size_Small" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Small" VerticalAlignment="Top" Width="20" Margin="10,39,0,0" FontSize="8"/>
-                                <TextBlock x:Name="Size_Medium" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Medium" VerticalAlignment="Top" Width="31" Margin="145,39,0,0" FontSize="8"/>
-                                <TextBlock x:Name="Size_Large" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Large" VerticalAlignment="Top" Width="20" Margin="300,39,0,0" FontSize="8"/>
-                                <TextBlock x:Name="Crowd_Number_Presentation" HorizontalAlignment="Right" Height="18" Margin="0,21,10,11" TextWrapping="Wrap" Text="1" VerticalAlignment="Center" Width="27" TextAlignment="Center"/>
-                            </Grid>
-                        </Grid>
-                        <Grid x:Name="Scene_Conditions" HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="115">
-                            <TextBlock x:Name="Scene_Conditions_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Conditions" VerticalAlignment="Top" Width="95" Margin="10,0,0,0"/>
-                            <Grid x:Name="Day_Time" HorizontalAlignment="Left" Height="63" Margin="0,21,0,0" VerticalAlignment="Top" Width="105">
-                                <TextBlock x:Name="Day_Time_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Time" VerticalAlignment="Top" FontSize="10"/>
-                                <StackPanel x:Name="Day_Time_List" Margin="10,18,10,0">
-                                    <RadioButton x:Name="Morning" Content="Morning" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="Day_Time_Checked"/>
-                                    <RadioButton x:Name="Noon" Content="Noon" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Day_Time_Checked"/>
-                                    <RadioButton x:Name="Afternoon" Content="Afternoon" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Day_Time_Checked"/>
-                                </StackPanel>
-                            </Grid>
-                            <Grid x:Name="Weather_Conditions" HorizontalAlignment="Left" Height="95" VerticalAlignment="Bottom" Width="105" Margin="0,0,0,26">
-                                <TextBlock x:Name="Weather_Conditions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Weather" VerticalAlignment="Top" FontSize="10"/>
-                                <StackPanel x:Name="Weather_Conditions_List" Margin="10,18,10,0">
-                                    <RadioButton x:Name="Sun" Content="Sun" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="Weather_Conditions_Checked"/>
-                                    <RadioButton x:Name="Rain" Content="Rain" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
-                                    <RadioButton x:Name="Snow" Content="Snow" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
-                                    <RadioButton x:Name="Overcast" Content="Overcast" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
-                                    <RadioButton x:Name="Fog" Content="Fog" FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="Weather_Conditions_Checked"/>
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </xctk:BusyIndicator>
-            </xctk:WizardPage>
-            <xctk:WizardPage x:Name="ModelsPage" 
-                             PageType="Blank"
-                             NextPage="{Binding ElementName=ActionsPage}"
-                             PreviousPage="{Binding ElementName=ScenePage}"
-                             HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="ModelsBusyIndicator">
-                    <Grid x:Name="Models_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
-                        <Grid x:Name="Model_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="310">
-                            <!-- <Button x:Name="Remove_Model_Button" Content="Remove" Margin="235,35,10,0" VerticalAlignment="Top" Width="65"/>-->
-                            <TextBlock x:Name="Models_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Models:" VerticalAlignment="Top"/>
-                            <ScrollViewer x:Name="Models_ScrollView" Margin="0,0,90,10">
-                                <ListBox x:Name="Models_List" Initialized="Models_List_Initialized" SelectionChanged="Models_List_Selected">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Content="{Binding ModelName}" Click="Models_CheckBox_Click"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </ScrollViewer>
-                            <Button x:Name="Add_Model_Button" Content="Add" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Model_Button_Click"/>
-                        </Grid>
-
-
-                        <!--<Grid x:Name="Models_3DPreview" Margin="208,0,10,60">
-                        <Border x:Name="Model_Preview" BorderBrush="Black" BorderThickness="2">
-                            <Image x:Name="Model_Preview_Image" HorizontalAlignment="Right" Height="202" VerticalAlignment="Top" Width="161" />
-                        </Border>
-                    </Grid>-->
-
-
-                        <Grid x:Name="Models_3DPreview"  HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="185" Margin="0,0,10,10">
-                            <Border x:Name="Model_Preview" BorderBrush="Black" BorderThickness="2"  Margin="0,0,10,10"/>
-                            <Image x:Name="Model_Preview_Image"  HorizontalAlignment="Right" Height="258" VerticalAlignment="Top" Width="181" Margin="2,2,12,12" Stretch="Fill"/>
-                            <Border/>
-                        </Grid>
-                    </Grid>
-                </xctk:BusyIndicator>
-            </xctk:WizardPage>
-            <xctk:WizardPage x:Name="ActionsPage" 
-                             PageType="Blank"
-                             NextPage="{Binding ElementName=ScenarioPage}"
-                             PreviousPage="{Binding ElementName=ModelsPage}"
-                             HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="ActionsBusyIndicator">
-                    <Grid x:Name="Actions_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
-                        <!--<Button x:Name="Remove_Action_Button" Content="Remove" Margin="0,35,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65"/>-->
-                        <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
-                        <ScrollViewer x:Name="Actions_ScrollView" Margin="0,0,99,20">
-                            <ListBox x:Name="Actions_List" Initialized="Animations_List_Initialized">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
-                        <Button x:Name="Add_Action_Button" Content="Add" Margin="0,10,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Click="Add_Action_Button_Click"/>
-                    </Grid>
-                </xctk:BusyIndicator>
-            </xctk:WizardPage>
             <xctk:WizardPage x:Name="ResultsPage"
                              PageType="Blank"
-                             CanSelectNextPage="False"
+                             NextPage="{Binding ElementName=SummaryPage}"
                              PreviousPage="{Binding ElementName=ScenarioPage}"
+                             CanSelectNextPage="False"
                              HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden">
+                             CancelButtonVisibility="Hidden"
+                             CanFinish="False">
                 <Grid x:Name="Results_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
                     <Grid x:Name="Results_Path_Choice" Margin="0,0,10,218">
                         <TextBlock x:Name="Results_Path_Header"  HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results folder path:" VerticalAlignment="Top"/>
@@ -211,6 +204,41 @@
                         </Grid>
                     </Grid>
                 </Grid>
+            </xctk:WizardPage>
+            <xctk:WizardPage x:Name="SummaryPage"
+        		PageType="Blank"
+        		CanSelectNextPage="False"
+        		PreviousPage="{Binding ElementName=ResultsPage}"
+        		HelpButtonVisibility="Hidden"
+        		CancelButtonVisibility="Hidden"
+        		NextButtonVisibility="Hidden"
+        		CanFinish="False">
+
+                <xctk:BusyIndicator x:Name="SummaryBusyIndicator" Margin="-9,0,-18,-18">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer x:Name="GeneratedFilesScrollViewer" Margin="10,10,10,52" Grid.Column="0">
+                            <TextBlock x:Name="GeneratedFilesTextBlock" TextWrapping="Wrap" Background="White" Height="219"/>
+                        </ScrollViewer>
+
+                        <Button x:Name="showInExplorerButton" Content="Show in explorer" Grid.Column="0" HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="102" Click="showInExplorerButton_Click" Height="20" IsEnabled="False"/>
+                        <Button x:Name="abortSimButton" Content="Abort" Grid.Column="1" HorizontalAlignment="Left" Margin="168,234,0,0" VerticalAlignment="Top" Width="75" Click="abortSimButton_Click" IsEnabled="False"/>
+                        <Button x:Name="startButton" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="168,209,0,0" VerticalAlignment="Top" Width="75" Click="startButton_Click"/>
+
+                        <Label x:Name="statusLabel" Content="Simulation status: " Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="framesCountLabel" Content="Frames count:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="repeatsLabel" Content="Repeats:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+
+                        <Label x:Name="statusValueLabel" Content="Ready" Grid.Column="1" HorizontalAlignment="Left" Margin="129,10,0,0" VerticalAlignment="Top" Width="120" />
+                        <Label x:Name="framesCountValueLabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,41,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Label x:Name="repeatsValueabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,72,0,0" VerticalAlignment="Top" Width="120"/>
+
+
+                    </Grid>
+                </xctk:BusyIndicator>
             </xctk:WizardPage>
         </xctk:Wizard>
     </Grid>
