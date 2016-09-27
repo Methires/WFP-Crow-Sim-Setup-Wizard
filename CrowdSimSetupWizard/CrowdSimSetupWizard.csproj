@@ -82,6 +82,9 @@
     </ApplicationDefinition>
     <Compile Include="AnimationFile.cs" />
     <Compile Include="ModelFile.cs" />
+    <Compile Include="ScenarioCreatorWindow.xaml.cs">
+      <DependentUpon>ScenarioCreatorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scenario\Data\Action.cs" />
     <Compile Include="Scenario\Data\Actor.cs" />
     <Compile Include="Scenario\Data\Blend.cs" />
@@ -104,6 +107,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ScenarioCreatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WizardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

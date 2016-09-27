@@ -9,58 +9,24 @@
         Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize">
     <Grid>
         <xctk:Wizard FinishButtonClosesWindow="True">
-            <xctk:WizardPage x:Name="ScenarioPage"
-                             PageType="Blank"
-                             NextPage="{Binding ElementName=ResultsPage}"
-                             PreviousPage="{Binding ElementName=ActionsPage}"
-                             HelpButtonVisibility="Hidden"
-                             CancelButtonVisibility="Hidden"
-                             CanSelectNextPage="False">
-                <Grid x:Name="Scenario_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
-                    <Grid x:Name="Scenario_File_Choice"  Margin="0,0,10,218">
-                        <TextBlock x:Name="Scenario_File_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File with scenario:" VerticalAlignment="Top"/>
-                        <ScrollViewer x:Name="Scenario_File_Path_ScrollView" Margin="10,21,86,0" Height="23" VerticalAlignment="Top">
-                            <TextBlock x:Name="Scenario_File_Path" TextWrapping="Wrap" Background="White"/>
-                        </ScrollViewer>
-                        <Button x:Name="Choose_Scenario_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Scenario_Button_Click"/>
-                    </Grid>
-                    <Grid x:Name="File_Preview" HorizontalAlignment="Left" Height="193" Margin="10,59,0,0" VerticalAlignment="Top" Width="271">
-                        <ScrollViewer x:Name="File_ScrolView" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
-                            <TextBlock x:Name="File_Contents" FontFamily="Consolas" FontSize="10" Background="#FFAEAEAE" Width="252" TextWrapping="WrapWithOverflow"/>
-                        </ScrollViewer>
-                    </Grid>
-                    <Button x:Name="Generate_Scenario_Button" Content="Generate" HorizontalAlignment="Left" Margin="414,54,0,194" VerticalAlignment="Center" Width="65" Height="24" IsEnabled="False"/>
-                    <Grid x:Name="Scenario_Params" HorizontalAlignment="Left" Height="179" VerticalAlignment="Top" Width="203" Margin="286,83,0,0">
-                        <TextBlock x:Name="Instances_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Simultaneous instances:" VerticalAlignment="Top" Margin="10,14,0,0"/>
-                        <xctk:IntegerUpDown x:Name="Instances_Value_Picker" Margin="148,10,10,146" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
-                        <TextBlock x:Name="Repeats_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Repeat scenario:" VerticalAlignment="Top" Margin="10,42,0,0"/>
-                        <xctk:IntegerUpDown x:Name="Repeats_Value_Picker" Margin="148,38,10,118" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
-                        <TextBlock x:Name="Tracking_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Only tracking:" VerticalAlignment="Top" Margin="10,125,0,0"/>
-                        <TextBlock x:Name="Length_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Session length:" VerticalAlignment="Top" Margin="10,150,0,0"/>
-                        <xctk:IntegerUpDown x:Name="Length_Value_Picker" Margin="148,146,10,10" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" IsReadOnly="True" ValueChanged="Value_Picker_ValueChanged"/>
-                        <CheckBox x:Name="Tracking_CheckBox"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,126,0,0" IsChecked ="False" Click="Tracking_CheckBox_Click"/>
-                    </Grid>
-                </Grid>
-
-            </xctk:WizardPage>
             <xctk:WizardPage x:Name="ScenePage" 
                              PageType="Blank"  
                              CanSelectPreviousPage="False"
                              NextPage="{Binding ElementName=ModelsPage}"
                              HelpButtonVisibility="Hidden"
                              CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="SceneBusyIndicator">
+                <xctk:BusyIndicator x:Name="SceneBusyIndicator">
                     <Grid x:Name="Scene_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
                         <Grid x:Name="Scene_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="379">
-                        
+
                             <Grid x:Name="Scene_Preview" Margin="208,0,10,60">
                                 <Border x:Name="Scene_Preview_Border" BorderBrush="Black" BorderThickness="2">
                                     <Image x:Name="Scene_Preview_Image" HorizontalAlignment="Right" Height="202" VerticalAlignment="Top" Width="161" />
                                 </Border>
                             </Grid>
-                        
+
                             <ScrollViewer x:Name="Scenes_ScrollView" Margin="0,0,246,60">
-                               <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized">
+                                <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <RadioButton Content="{Binding FileName}" IsChecked="{Binding IsFirst}" GroupName="FakoGroup"  Checked="Scene_List_Checked"/>
@@ -115,7 +81,7 @@
                              PreviousPage="{Binding ElementName=ScenePage}"
                              HelpButtonVisibility="Hidden"
                              CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="ModelsBusyIndicator">
+                <xctk:BusyIndicator x:Name="ModelsBusyIndicator">
                     <Grid x:Name="Models_Contents" HorizontalAlignment="Left" Height="272" Margin="0,0,-18,-18" VerticalAlignment="Top" Width="505">
                         <Grid x:Name="Model_Choice" HorizontalAlignment="Left" Height="262" VerticalAlignment="Top" Width="310">
                             <!-- <Button x:Name="Remove_Model_Button" Content="Remove" Margin="235,35,10,0" VerticalAlignment="Top" Width="65"/>-->
@@ -154,7 +120,7 @@
                              PreviousPage="{Binding ElementName=ModelsPage}"
                              HelpButtonVisibility="Hidden"
                              CancelButtonVisibility="Hidden">
-                <xctk:BusyIndicator Name="ActionsBusyIndicator">
+                <xctk:BusyIndicator x:Name="ActionsBusyIndicator">
                     <Grid x:Name="Actions_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
                         <!--<Button x:Name="Remove_Action_Button" Content="Remove" Margin="0,35,19,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65"/>-->
                         <TextBlock x:Name="Actions_Header" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Actions:" VerticalAlignment="Top"/>
@@ -186,21 +152,14 @@
                         <Button x:Name="Choose_Results_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Results_Button_Click"/>
                     </Grid>
                     <Grid x:Name="Results_Params" HorizontalAlignment="Left" Height="208" Margin="0,54,0,0" VerticalAlignment="Top" Width="499">
-                        <Grid x:Name="Visual_File_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="85">
-                            <TextBlock x:Name="Visual_File_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File type:" VerticalAlignment="Top"/>
-                            <ListBox x:Name="Visual_File_List" HorizontalAlignment="Left" Height="46" VerticalAlignment="Top" Width="65" Margin="10,21,0,0">
-                                <CheckBox x:Name="Type_PNG" Content=".PNG" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" IsEnabled="False" Click="Visual_File_Type_Click"/>
-                                <CheckBox x:Name="Type_AVI" Content=".AVI" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" Click="Visual_File_Type_Click"/>
-                            </ListBox>
-                        </Grid>
-                        <Grid x:Name="Results_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="213" Margin="90,0,0,0">
+                        <Grid x:Name="Results_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="213" Margin="10,0,0,0">
                             <TextBlock x:Name="Results_Type_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results type:" VerticalAlignment="Top"/>
                             <StackPanel x:Name="Results_Type_List" HorizontalAlignment="Left" Height="167" Margin="10,21,0,0" VerticalAlignment="Top" Width="193">
                                 <RadioButton x:Name="Type_Sequences" Content="Raw sequences" Checked="Results_Type_Checked"/>
                                 <RadioButton x:Name="Type_Sequences_Boxes" Content="Sequences with bounding boxes" IsChecked="True" Checked="Results_Type_Checked"/>
                             </StackPanel>
                         </Grid>
-                        <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="308,0,0,0" VerticalAlignment="Top" Width="191">
+                        <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">
                             <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top"/>
                             <TextBlock x:Name="ScreenWidth_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" Margin="10,25,0,0"/>
                             <xctk:IntegerUpDown x:Name="Width_Value_Picker" Margin="111,21,10,164" DefaultValue="1920" Minimum="128" Maximum="5120" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
@@ -211,6 +170,40 @@
                         </Grid>
                     </Grid>
                 </Grid>
+            </xctk:WizardPage>
+            <xctk:WizardPage x:Name="ScenarioPage"
+                             PageType="Blank"
+                             NextPage="{Binding ElementName=ResultsPage}"
+                             PreviousPage="{Binding ElementName=ActionsPage}"
+                             HelpButtonVisibility="Hidden"
+                             CancelButtonVisibility="Hidden"
+                             CanSelectNextPage="False">
+                <Grid x:Name="Scenario_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
+                    <Grid x:Name="Scenario_File_Choice"  Margin="0,0,10,218">
+                        <TextBlock x:Name="Scenario_File_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File with scenario:" VerticalAlignment="Top"/>
+                        <ScrollViewer x:Name="Scenario_File_Path_ScrollView" Margin="10,21,86,0" Height="23" VerticalAlignment="Top">
+                            <TextBlock x:Name="Scenario_File_Path" TextWrapping="Wrap" Background="White"/>
+                        </ScrollViewer>
+                        <Button x:Name="Choose_Scenario_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Scenario_Button_Click"/>
+                    </Grid>
+                    <Grid x:Name="File_Preview" HorizontalAlignment="Left" Height="193" Margin="10,59,0,0" VerticalAlignment="Top" Width="271">
+                        <ScrollViewer x:Name="File_ScrolView" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
+                            <TextBlock x:Name="File_Contents" FontFamily="Consolas" FontSize="10" Background="#FFAEAEAE" Width="252" TextWrapping="WrapWithOverflow"/>
+                        </ScrollViewer>
+                    </Grid>
+                    <Button x:Name="Create_Scenario_Button" Content="Create" HorizontalAlignment="Left" Margin="414,54,0,194" VerticalAlignment="Center" Width="65" Height="24" IsEnabled="True" Click="Create_Scenario_Button_Click"/>
+                    <Grid x:Name="Scenario_Params" HorizontalAlignment="Left" Height="179" VerticalAlignment="Top" Width="203" Margin="286,83,0,0">
+                        <TextBlock x:Name="Instances_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Simultaneous instances:" VerticalAlignment="Top" Margin="10,14,0,0"/>
+                        <xctk:IntegerUpDown x:Name="Instances_Value_Picker" Margin="148,10,10,146" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
+                        <TextBlock x:Name="Repeats_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Repeat scenario:" VerticalAlignment="Top" Margin="10,42,0,0"/>
+                        <xctk:IntegerUpDown x:Name="Repeats_Value_Picker" Margin="148,38,10,118" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
+                        <TextBlock x:Name="Tracking_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Only tracking:" VerticalAlignment="Top" Margin="10,125,0,0"/>
+                        <TextBlock x:Name="Length_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Session length:" VerticalAlignment="Top" Margin="10,150,0,0"/>
+                        <xctk:IntegerUpDown x:Name="Length_Value_Picker" Margin="148,146,10,10" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" IsReadOnly="True" ValueChanged="Value_Picker_ValueChanged"/>
+                        <CheckBox x:Name="Tracking_CheckBox"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,126,0,0" IsChecked ="False" Click="Tracking_CheckBox_Click"/>
+                    </Grid>
+                </Grid>
+
             </xctk:WizardPage>
         </xctk:Wizard>
     </Grid>
