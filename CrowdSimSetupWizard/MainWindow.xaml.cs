@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 
 namespace CrowdSimSetupWizard
 {
@@ -11,9 +12,27 @@ namespace CrowdSimSetupWizard
         public MainWindow()
         {
             InitializeComponent();
-            WizardWindow wizard = new WizardWindow();
-            wizard.ShowDialog();
-            Close();
+
+            if (!UnityProjectExists())
+            {
+                var Result = MessageBox.Show("Unity project appears to be missinig from working directory!", "Unity project missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (Result == MessageBoxResult.OK)
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                WizardWindow wizard = new WizardWindow();
+                wizard.ShowDialog();
+                Close();
+            }
+            
+        }
+
+        private bool UnityProjectExists()
+        {
+            return Directory.Exists(WizardWindow.Project);
         }
     }
 }

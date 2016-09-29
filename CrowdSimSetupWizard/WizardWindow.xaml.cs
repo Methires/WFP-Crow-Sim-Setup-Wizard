@@ -52,8 +52,8 @@ namespace CrowdSimSetupWizard
         private void InitializeData()
         {
             _data.SceneName = "";
-            _data.DayTime = 0;
-            _data.WeatherConditions = 0;
+            _data.DayTime = 1;
+            _data.WeatherConditions = 1;
             //Crowd
             _data.Models = "";
             _data.MaxPeople = (int)Crowd_Size_Slider.Value;
@@ -65,7 +65,7 @@ namespace CrowdSimSetupWizard
             _data.Repeats = (int)Repeats_Value_Picker.Value;
             _data.Instances = (int)Instances_Value_Picker.Value;          
             //Results
-            _data.ResultsPath = "";
+            _data.ResultsPath = _screenshotDirectory;
             _data.BoundingBoxes = false;
             _data.ScreenWidth = (int)Width_Value_Picker.Value;
             _data.ScreenHeight = (int)Height_Value_Picker.Value;
@@ -89,7 +89,7 @@ namespace CrowdSimSetupWizard
         private StringBuilder _actionsFilter;
         private BitmapImage _noImage;
         private bool _unityKilled = false;
-        private string _screenshotDirectory = "D:/Screenshots";
+        private string _screenshotDirectory = AppDomain.CurrentDomain.BaseDirectory + "Screenshots";//"D:/Screenshots";
         private DirectoryInfo _screenshotDirInfo;
         private BackgroundWorker _bw;
         private bool _simulationComplete = false;
@@ -98,13 +98,15 @@ namespace CrowdSimSetupWizard
 
 
         public WizardWindow()
-        {
+        {           
             InitializeComponent();
             InitializeData();
             FindUnity();
             _data.Tracking = false;
             _data.BoundingBoxes = true;
             _noImage = GetNoImage();
+
+            
             
         }
         
@@ -124,6 +126,8 @@ namespace CrowdSimSetupWizard
             //string u = (string)result;
             //_unityPath = u;
         }
+
+       
 
         private void Scene_List_Checked(object sender, RoutedEventArgs e)
         {
@@ -159,7 +163,7 @@ namespace CrowdSimSetupWizard
             }
             else
             {
-                return null;//_project + "\\Assets\\Scenes\\noImage.png";
+                return null;
             }             
         }
 
@@ -619,6 +623,20 @@ namespace CrowdSimSetupWizard
             }
         }
 
+        private void Results_Path_Initialized(object sender, EventArgs e)
+        {
+            if (Directory.Exists(_screenshotDirectory))
+            {
+                Results_Path.Text = _screenshotDirectory;
+                _data.ResultsPath = _screenshotDirectory;
+                ResultsPage.CanSelectNextPage = true;
+            }
+            else
+            {
+                ResultsPage.CanSelectNextPage = false;
+            }
+        }
+
         private void Results_Type_Checked(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(Type_Sequences))
@@ -867,5 +885,7 @@ namespace CrowdSimSetupWizard
                 return null;
             }          
         }
+
+
     }
 }

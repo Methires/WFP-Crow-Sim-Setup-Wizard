@@ -40,7 +40,7 @@
                             <Button x:Name="Load_Scene_Button" Content="Load" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Load_Scene_Button_Click"/>
                             <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,35,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
                             <!--ScenePreview was here-->
-                            <xctk:IntegerUpDown x:Name="Scene_Size_Value_Picker" Margin="138,91,176,148" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
+                            <xctk:IntegerUpDown x:Name="Scene_Size_Value_Picker" Margin="138,91,176,148" DefaultValue="10" Minimum="5" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged" Maximum="15"/>
                             <Grid x:Name="Crowd_Size" HorizontalAlignment="Left" Height="55" VerticalAlignment="Bottom" Width="379">
                                 <Slider x:Name="Crowd_Size_Slider" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="310" Minimum="1" Maximum="500" Value="1" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="Crowd_Size_Slider_ValueChanged"/>
                                 <TextBlock x:Name="Slider_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Crowd size:" VerticalAlignment="Top" Width="65"/>
@@ -174,7 +174,7 @@
                     <Grid x:Name="Results_Path_Choice" Margin="0,0,10,218">
                         <TextBlock x:Name="Results_Path_Header"  HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results folder path:" VerticalAlignment="Top"/>
                         <ScrollViewer x:Name="Results_Path_ScrollView" Margin="10,21,86,0" Height="23" VerticalAlignment="Top">
-                            <TextBlock x:Name="Results_Path" TextWrapping="Wrap" Background="White"/>
+                            <TextBlock x:Name="Results_Path" TextWrapping="Wrap" Background="White" Initialized="Results_Path_Initialized"/>
                         </ScrollViewer>
                         <Button x:Name="Choose_Results_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Results_Button_Click"/>
                     </Grid>
