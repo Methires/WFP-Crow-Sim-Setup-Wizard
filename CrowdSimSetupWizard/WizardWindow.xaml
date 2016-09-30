@@ -8,10 +8,6 @@
         mc:Ignorable="d"
         Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="391*"/>
-            <ColumnDefinition Width="128*"/>
-        </Grid.ColumnDefinitions>
         <xctk:Wizard FinishButtonClosesWindow="True" Grid.ColumnSpan="2">
             <xctk:WizardPage x:Name="ScenePage" 
                              PageType="Blank"  
@@ -136,19 +132,19 @@
                              CancelButtonVisibility="Hidden"
                              CanSelectNextPage="False">
                 <Grid x:Name="Scenario_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
-                    <Grid x:Name="Scenario_File_Choice"  Margin="0,0,10,218">
+                    <Grid x:Name="Scenario_File_Choice"  Margin="0,0,10,194">
                         <TextBlock x:Name="Scenario_File_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="File with scenario:" VerticalAlignment="Top"/>
-                        <ScrollViewer x:Name="Scenario_File_Path_ScrollView" Margin="10,21,86,0" Height="23" VerticalAlignment="Top">
+                        <ScrollViewer x:Name="Scenario_File_Path_ScrollView" Margin="10,21,86,0" Height="37" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
                             <TextBlock x:Name="Scenario_File_Path" TextWrapping="Wrap" Background="White"/>
                         </ScrollViewer>
-                        <Button x:Name="Choose_Scenario_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Scenario_Button_Click"/>
+                        <Button x:Name="Choose_Scenario_Button" Content="Choose" HorizontalAlignment="Left" Margin="420,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Scenario_Button_Click"/>
+                        <Button x:Name="Generate_Scenario_Button" Content="Generate" HorizontalAlignment="Left" Margin="420,50,0,4" VerticalAlignment="Center" Width="65" Height="24" Click="Create_Scenario_Button_Click"/>
                     </Grid>
-                    <Grid x:Name="File_Preview" HorizontalAlignment="Left" Height="193" Margin="10,59,0,0" VerticalAlignment="Top" Width="271">
+                    <Grid x:Name="File_Preview" HorizontalAlignment="Left" Height="170" Margin="10,83,0,0" VerticalAlignment="Top" Width="271">
                         <ScrollViewer x:Name="File_ScrolView" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
                             <TextBlock x:Name="File_Contents" FontFamily="Consolas" FontSize="10" Background="#FFAEAEAE" Width="252" TextWrapping="WrapWithOverflow"/>
                         </ScrollViewer>
                     </Grid>
-                    <Button x:Name="Generate_Scenario_Button" Content="Generate" HorizontalAlignment="Left" Margin="414,54,0,194" VerticalAlignment="Center" Width="65" Height="24" Click="Create_Scenario_Button_Click"/>
                     <Grid x:Name="Scenario_Params" HorizontalAlignment="Left" Height="179" VerticalAlignment="Top" Width="203" Margin="286,83,0,0">
                         <TextBlock x:Name="Instances_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Simultaneous instances:" VerticalAlignment="Top" Margin="10,14,0,0"/>
                         <xctk:IntegerUpDown x:Name="Instances_Value_Picker" Margin="148,10,10,146" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
@@ -171,14 +167,14 @@
                              CancelButtonVisibility="Hidden"
                              CanFinish="False">
                 <Grid x:Name="Results_Contents" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="505" Margin="0,0,-18,-18">
-                    <Grid x:Name="Results_Path_Choice" Margin="0,0,10,218">
+                    <Grid x:Name="Results_Path_Choice" Margin="0,0,10,195">
                         <TextBlock x:Name="Results_Path_Header"  HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results folder path:" VerticalAlignment="Top"/>
-                        <ScrollViewer x:Name="Results_Path_ScrollView" Margin="10,21,86,0" Height="23" VerticalAlignment="Top">
+                        <ScrollViewer x:Name="Results_Path_ScrollView" Margin="10,21,86,0" Height="37" VerticalAlignment="Top" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Hidden">
                             <TextBlock x:Name="Results_Path" TextWrapping="Wrap" Background="White" Initialized="Results_Path_Initialized"/>
                         </ScrollViewer>
                         <Button x:Name="Choose_Results_Button" Content="Choose" HorizontalAlignment="Left" Margin="414,21,0,0" VerticalAlignment="Top" Width="65" Height="24" Click="Choose_Results_Button_Click"/>
                     </Grid>
-                    <Grid x:Name="Results_Params" HorizontalAlignment="Left" Height="208" Margin="0,54,0,0" VerticalAlignment="Top" Width="499">
+                    <Grid x:Name="Results_Params" HorizontalAlignment="Left" Height="180" Margin="0,82,0,0" VerticalAlignment="Top" Width="499">
                         <Grid x:Name="Results_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="213" Margin="10,0,0,0">
                             <TextBlock x:Name="Results_Type_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results type:" VerticalAlignment="Top"/>
                             <StackPanel x:Name="Results_Type_List" HorizontalAlignment="Left" Height="167" Margin="10,21,0,0" VerticalAlignment="Top" Width="193">

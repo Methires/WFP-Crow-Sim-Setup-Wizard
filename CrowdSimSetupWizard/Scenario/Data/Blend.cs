@@ -1,6 +1,6 @@
 ﻿namespace CrowdSimSetupWizard
 {
-    class Blend
+    public class Blend
     {
         public string Name;
         public string MocapId;

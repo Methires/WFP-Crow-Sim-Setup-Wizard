@@ -1,0 +1,27 @@
+﻿<Window x:Class="CrowdSimSetupWizard.AddActionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CrowdSimSetupWizard"
+        mc:Ignorable="d"
+        Title="Action" Height="360" Width="300" Background="#ececec" ResizeMode="NoResize">
+    <Grid>
+        <Label x:Name="action_Name_Label" Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="action_Name_List_ComboBox" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="262" Loaded="action_Name_List_ComboBox_Loaded" SelectionChanged="action_Name_List_ComboBox_SelectionChanged" IsEditable="True" IsReadOnly="True" Text="Choose action">
+        </ComboBox>
+        <Label x:Name="probability_Label" Content="Probability:" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="probability_textBlock" HorizontalAlignment="Right" Margin="0,76,22,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Right" Text="0"/>
+        <Slider x:Name="probability_Slider" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" Width="262" Maximum="100" TickFrequency="5" IsSnapToTickEnabled="True" ValueChanged="probability_Slider_ValueChanged"/>
+        <!--<Label x:Name="action_mocapId_Label" Content="Mocap Index:" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="action_MocapId_List_ComboBox" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Width="262" IsEnabled="False" SelectionChanged="action_MocapId_List_ComboBox_SelectionChanged">
+        </ComboBox>-->
+        <Label x:Name="actor_name_Label" Content="Actors:" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
+        <ScrollViewer x:Name="actors_scrollView" HorizontalAlignment="Left" Height="135" VerticalAlignment="Top" Width="256" Margin="16,151,0,0">
+            <TreeView x:Name="actors_TreeView">
+            </TreeView>
+        </ScrollViewer>
+        <Button x:Name="cancel_button" Content="Cancel" HorizontalAlignment="Left" Margin="16,291,0,0" VerticalAlignment="Top" Width="91" Height="20" Click="cancel_button_Click"/>
+        <Button x:Name="save_button" Content="Save" HorizontalAlignment="Right" Margin="0,291,10,0" VerticalAlignment="Top" Width="91" Height="20" Click="save_button_Click"/>
+    </Grid>
+</Window>

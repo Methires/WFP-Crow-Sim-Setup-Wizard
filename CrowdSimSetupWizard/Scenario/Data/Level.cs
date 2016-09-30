@@ -2,7 +2,7 @@
 
 namespace CrowdSimSetupWizard
 {
-    class Level
+    public class Level
     {
         public int Index;
         public List<Action> Actions;

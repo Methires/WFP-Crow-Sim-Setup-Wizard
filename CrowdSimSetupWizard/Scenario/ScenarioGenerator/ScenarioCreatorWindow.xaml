@@ -1,0 +1,31 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CrowdSimSetupWizard"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CrowdSimSetupWizard.ScenarioCreatorWindow"
+        mc:Ignorable="d"
+        Title="Create new scenario" Height="510" Width="720" ResizeMode="CanMinimize" Background="#ececec">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="300*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="Add_Level_Button" Content="Add level" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Click="Add_Level_Button_Click"/>
+        <Button x:Name="Remove_Level" Content="Remove last" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Remove_Level_Click"/>
+        <Button x:Name="Add_Action_Button" Content="Add action" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Add_Action_Button_Click"/>
+        <Button x:Name="Remove_Action_Button" Content="Remove action" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Remove_Action_Button_Click"/>
+        <TextBlock x:Name="Status_Header_TextBlock" HorizontalAlignment="Left" Height="25" Margin="10,201,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Width="100" FontSize="16"/>
+        <TextBlock x:Name="Error_Message_TextBlock" HorizontalAlignment="Left" Height="120" Margin="9,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" FontSize="10"/>
+        <Button x:Name="Save_Scenario_Button" Content="Save scenario" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+        <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Left" Margin="10,429,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Cancel_Button_Click"/>
+        <ScrollViewer x:Name="Scenario_ScrollView" Grid.Column="1" HorizontalAlignment="Left" Height="449" Margin="10,10,0,0" VerticalAlignment="Top" Width="280">
+            <TreeView x:Name="Scenario_TreeView" SelectedItemChanged="Scenario_TreeView_SelectedItemChanged">
+            </TreeView>
+        </ScrollViewer>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2" HorizontalAlignment="Left" Height="449" Margin="10,10,0,0" VerticalAlignment="Top" Width="270"/>
+
+    </Grid>
+</Window>

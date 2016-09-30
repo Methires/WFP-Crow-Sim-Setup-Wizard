@@ -1,6 +1,6 @@
 ﻿namespace CrowdSimSetupWizard
 {
-    class Actor
+    public class Actor
     {
         public string Name;
         public string MocapId;

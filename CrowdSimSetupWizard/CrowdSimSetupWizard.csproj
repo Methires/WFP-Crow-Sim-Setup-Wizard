@@ -81,9 +81,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AnimationFile.cs" />
-    <Compile Include="ModelFile.cs" />
-    <Compile Include="ScenarioCreatorWindow.xaml.cs">
+    <Compile Include="Scenario\ScenarioGenerator\AddActionWindow.xaml.cs">
+      <DependentUpon>AddActionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ClassesForBinding\AnimationFile.cs" />
+    <Compile Include="ClassesForBinding\ModelFile.cs" />
+    <Compile Include="Scenario\ScenarioGenerator\DefineActors.xaml.cs">
+      <DependentUpon>DefineActors.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Scenario\ScenarioGenerator\ScenarioCreatorWindow.xaml.cs">
       <DependentUpon>ScenarioCreatorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scenario\Data\Action.cs" />
@@ -92,10 +98,14 @@
     <Compile Include="Scenario\Data\Level.cs" />
     <Compile Include="Scenario\ScenarioException.cs" />
     <Compile Include="Scenario\ScenarioValidator.cs" />
-    <Compile Include="SceneFile.cs" />
+    <Compile Include="ClassesForBinding\SceneFile.cs" />
     <Compile Include="WizardWindow.xaml.cs">
       <DependentUpon>WizardWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Scenario\ScenarioGenerator\AddActionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -108,7 +118,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ScenarioCreatorWindow.xaml">
+    <Page Include="Scenario\ScenarioGenerator\DefineActors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Scenario\ScenarioGenerator\ScenarioCreatorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,6 +162,7 @@
   <ItemGroup>
     <None Include="Resources\NoImage.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

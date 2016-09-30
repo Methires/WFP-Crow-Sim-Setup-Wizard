@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Windows.Forms;
@@ -11,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using System.Drawing.Imaging;
-using Microsoft.Win32;
 
 namespace CrowdSimSetupWizard
 {
@@ -539,8 +537,8 @@ namespace CrowdSimSetupWizard
 
         private void Create_Scenario_Button_Click(object sender, RoutedEventArgs e)
         {
-            ScenarioCreatorWindow scenarioWindow = new ScenarioCreatorWindow();
-            scenarioWindow.ShowDialog();
+            ScenarioCreatorWindow generator = new ScenarioCreatorWindow();
+            generator.ShowDialog();
         }
 
         private void Value_Picker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

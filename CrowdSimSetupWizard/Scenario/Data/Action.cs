@@ -2,7 +2,7 @@
 
 namespace CrowdSimSetupWizard
 {
-    class Action
+    public class Action
     {
         public string Name;
         public float Probability;
