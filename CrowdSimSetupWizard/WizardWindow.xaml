@@ -33,10 +33,9 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </ScrollViewer>
-                            <Button x:Name="Load_Scene_Button" Content="Load" HorizontalAlignment="Right" Margin="0,10,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Load_Scene_Button_Click"/>
-                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,35,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
+                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,0,176,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
                             <!--ScenePreview was here-->
-                            <xctk:IntegerUpDown x:Name="Scene_Size_Value_Picker" Margin="138,91,176,148" DefaultValue="10" Minimum="5" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged" Maximum="15"/>
+                            <xctk:IntegerUpDown x:Name="Scene_Size_Value_Picker" Margin="138,46,176,193" DefaultValue="10" Minimum="5" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged" Maximum="15"/>
                             <Grid x:Name="Crowd_Size" HorizontalAlignment="Left" Height="55" VerticalAlignment="Bottom" Width="379">
                                 <Slider x:Name="Crowd_Size_Slider" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="310" Minimum="1" Maximum="500" Value="1" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="Crowd_Size_Slider_ValueChanged"/>
                                 <TextBlock x:Name="Slider_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Crowd size:" VerticalAlignment="Top" Width="65"/>
@@ -45,7 +44,7 @@
                                 <TextBlock x:Name="Size_Large" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Large" VerticalAlignment="Top" Width="20" Margin="300,39,0,0" FontSize="8"/>
                                 <TextBlock x:Name="Crowd_Number_Presentation" HorizontalAlignment="Right" Height="18" Margin="0,21,10,11" TextWrapping="Wrap" Text="1" VerticalAlignment="Center" Width="27" TextAlignment="Center"/>
                             </Grid>
-                            <Label x:Name="Scene_Size_Label" Content="Scene size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="138,60,0,0"/>
+                            <Label x:Name="Scene_Size_Label" Content="Scene size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="139,20,0,0"/>
                         </Grid>
                         <Grid x:Name="Scene_Conditions" HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="115">
                             <TextBlock x:Name="Scene_Conditions_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Conditions" VerticalAlignment="Top" Width="95" Margin="10,0,0,0"/>
@@ -192,7 +191,6 @@
                             <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
                             <xctk:IntegerUpDown x:Name="Buffer_Size_Value_Picker" Margin="111,136,10,49" DefaultValue="500" Minimum="1" Maximum="2000" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
-
                         </Grid>
                     </Grid>
                 </Grid>
@@ -205,7 +203,6 @@
         		CancelButtonVisibility="Hidden"
         		NextButtonVisibility="Hidden"
         		CanFinish="False">
-
                 <xctk:BusyIndicator x:Name="SummaryBusyIndicator" Margin="-9,0,-18,-18">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -229,8 +226,6 @@
                         <Label x:Name="statusValueLabel" Content="Ready" Grid.Column="1" HorizontalAlignment="Left" Margin="129,10,0,0" VerticalAlignment="Top" Width="120" />
                         <Label x:Name="framesCountValueLabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,41,0,0" VerticalAlignment="Top" Width="120"/>
                         <Label x:Name="repeatsValueabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,67,0,0" VerticalAlignment="Top" Width="120"/>
-
-
                     </Grid>
                 </xctk:BusyIndicator>
             </xctk:WizardPage>
