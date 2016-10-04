@@ -86,6 +86,9 @@
     </Compile>
     <Compile Include="ClassesForBinding\AnimationFile.cs" />
     <Compile Include="ClassesForBinding\ModelFile.cs" />
+    <Compile Include="Scenario\ScenarioGenerator\ChooseActorsForAction.xaml.cs">
+      <DependentUpon>ChooseActorsForAction.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Scenario\ScenarioGenerator\DefineActors.xaml.cs">
       <DependentUpon>DefineActors.xaml</DependentUpon>
     </Compile>
@@ -118,6 +121,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Scenario\ScenarioGenerator\ChooseActorsForAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Scenario\ScenarioGenerator\DefineActors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

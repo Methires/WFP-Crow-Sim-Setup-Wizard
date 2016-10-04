@@ -16,6 +16,8 @@ namespace CrowdSimSetupWizard
 {
     public partial class ScenarioCreatorWindow : Window
     {
+        public List<string> ActorsNames { get; set; }
+        public int ActorsNumber { get; set; }
         private List<Level> _levels;
         private TreeViewItem _selectedItem;
 
@@ -85,11 +87,11 @@ namespace CrowdSimSetupWizard
 
         private void Add_Action_Button_Click(object sender, RoutedEventArgs e)
         {
-            DefineActors numberWindow = new DefineActors();
-            AddActionWindow actionWindow = new AddActionWindow();
-            actionWindow.PreviousLevel = GetPreviousLevel(_selectedItem);
-            numberWindow.ActionWindow = actionWindow;
-            numberWindow.ShowDialog();       
+            //DefineActors numberWindow = new DefineActors();
+            //AddActionWindow actionWindow = new AddActionWindow();
+            //actionWindow.PreviousLevel = GetPreviousLevel(_selectedItem);
+            //numberWindow.ActionWindow = actionWindow;
+            //numberWindow.ShowDialog();       
         }
 
         private Level GetPreviousLevel(TreeViewItem _selectedItem)

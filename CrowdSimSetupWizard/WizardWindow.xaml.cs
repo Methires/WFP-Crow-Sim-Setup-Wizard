@@ -537,8 +537,8 @@ namespace CrowdSimSetupWizard
 
         private void Create_Scenario_Button_Click(object sender, RoutedEventArgs e)
         {
-            ScenarioCreatorWindow generator = new ScenarioCreatorWindow();
-            generator.ShowDialog();
+            DefineActors defActors = new DefineActors();
+            defActors.ShowDialog();
         }
 
         private void Value_Picker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
