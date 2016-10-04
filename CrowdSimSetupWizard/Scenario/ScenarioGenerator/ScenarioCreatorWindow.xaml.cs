@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CrowdSimSetupWizard
 {
@@ -20,6 +11,7 @@ namespace CrowdSimSetupWizard
         public int ActorsNumber { get; set; }
         private List<Level> _levels;
         private TreeViewItem _selectedItem;
+        private bool _scenarioValidated;
 
         public ScenarioCreatorWindow()
         {
@@ -59,7 +51,6 @@ namespace CrowdSimSetupWizard
                     tvAction.Header = string.Format("{0} | Probability: {1}", action.Name, action.Probability);
                     tvLevel.Items.Add(tvAction);
                 }
-
                 Scenario_TreeView.Items.Add(tvLevel);
             }
         }
@@ -87,11 +78,12 @@ namespace CrowdSimSetupWizard
 
         private void Add_Action_Button_Click(object sender, RoutedEventArgs e)
         {
-            //DefineActors numberWindow = new DefineActors();
-            //AddActionWindow actionWindow = new AddActionWindow();
-            //actionWindow.PreviousLevel = GetPreviousLevel(_selectedItem);
-            //numberWindow.ActionWindow = actionWindow;
-            //numberWindow.ShowDialog();       
+            ChooseActorsForAction actorsWindow = new ChooseActorsForAction();
+            actorsWindow.ActorsNames = ActorsNames;
+            actorsWindow.PreviousLevel = GetPreviousLevel(_selectedItem);
+            actorsWindow.GeneratorMainWindow = this;
+            actorsWindow.PrepareActorsList();
+            actorsWindow.ShowDialog();
         }
 
         private Level GetPreviousLevel(TreeViewItem _selectedItem)
@@ -110,14 +102,22 @@ namespace CrowdSimSetupWizard
 
         }
 
-        private void Edit_Action_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public void AddNewActionToLevel(Action action)
+        {
+            string[] header = _selectedItem.Header.ToString().Split(':');
+            int index = int.Parse(header[header.Length - 1]);
+            _levels[index].Actions.Add(action);
+            UpdateTreeView();
+        }
+
+        private void ValidateChange()
+        {
+            ScenarioValidator validator = new ScenarioValidator();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System;
+using System.Linq;
 
 namespace CrowdSimSetupWizard
 {
@@ -47,11 +48,15 @@ namespace CrowdSimSetupWizard
                         TextBox itemTB = item.Header as TextBox;
                         if (itemTB.Text.Equals(""))
                         {
-                            throw new Exception("Empty string cannot be an actor's name.");
+                            throw new ScenarioException("Empty string cannot be an actor's name.");
                         }
                         else
                         {
                             actorsNames.Add(itemTB.Text);
+                        }
+                        if (actorsNames.Count != actorsNames.Distinct().Count())
+                        {
+                            throw new ScenarioException("Each actor must have a unique name.");
                         }
                     }
                 }
@@ -66,9 +71,9 @@ namespace CrowdSimSetupWizard
                 generator.ShowDialog();
                 Close();
             }
-            catch (Exception exc)
+            catch (ScenarioException ex)
             {
-                MessageBox.Show(exc.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 

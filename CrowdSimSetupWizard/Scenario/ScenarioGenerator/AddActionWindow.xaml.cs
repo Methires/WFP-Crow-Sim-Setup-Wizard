@@ -21,9 +21,9 @@ namespace CrowdSimSetupWizard
     public partial class AddActionWindow : Window
     {
         public Level PreviousLevel { get; set; }
-        public int ActorsNumber { get; set; }
+        public List<string> ActorsNames { get; set; }
+        public ScenarioCreatorWindow Generator { get; set; }
         private string _selectedName;
-        private string _selectedMocapId;
         private float _probability;
         private string _animationsPath = MainWindow.ProjectPath + "\\Assets\\Resources\\Animations\\";
         private static int _id;
@@ -32,7 +32,6 @@ namespace CrowdSimSetupWizard
         {
             _selectedName = "";
             InitializeComponent();
-            //save_button.IsEnabled = CheckSaveButtonStatus();
         }
 
         private void action_Name_List_ComboBox_Loaded(object sender, RoutedEventArgs e)
@@ -61,13 +60,9 @@ namespace CrowdSimSetupWizard
                 _selectedName = cb.SelectedItem as string;
                 if (_selectedName != null)
                 {
-                    _selectedMocapId = "";
                     PrepareActorsTreeView(_selectedName);
+                    save_button.IsEnabled = CheckSaveButtonStatus();
                 }
-                else
-                {
-                }
-                save_button.IsEnabled = CheckSaveButtonStatus();
             }
         }
 
@@ -90,16 +85,6 @@ namespace CrowdSimSetupWizard
             return mocapId;
         }
 
-        private void action_MocapId_List_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox cb = sender as ComboBox;
-            if (cb != null)
-            {
-                _selectedMocapId = cb.SelectedItem as string;
-                //save_button.IsEnabled = CheckSaveButtonStatus();
-            }
-        }
-
         private void cancel_button_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -107,22 +92,45 @@ namespace CrowdSimSetupWizard
 
         private void save_button_Click(object sender, RoutedEventArgs e)
         {
-            Action action = new Action();
-            action.Name = _selectedName;
-            action.Probability = _probability;
-            action.Index = _id;
-            _id++;
-            foreach (TreeViewItem actorItem in actors_TreeView.Items)
+            try
             {
-                Actor actor = new Actor();
-                actor.Name = actorItem.Header.ToString();
-                if (actorItem.Items.Count != 0)
+                Action action = new Action();
+                action.Name = _selectedName;
+                action.Probability = _probability;
+                action.Index = _id;
+                _id++;
+                foreach (TreeViewItem actorItem in Actors_TreeView.Items)
                 {
-                    if (!(action.Name.Equals("Walk") || action.Name.Equals("Run")))
+                    Actor actor = new Actor();
+                    actor.Name = actorItem.Header.ToString();
+                    if (actorItem.Items.Count != 0)
                     {
-
-                    } 
+                        if (action.Name.Equals("Walk") || action.Name.Equals("Run"))
+                        {
+                            actor.MocapId = "";
+                            if (PreviousLevel != null)
+                            {
+                                SetPreviousId(actorItem.Items[0] as TreeViewItem, ref actor);
+                            }
+                        }
+                        else
+                        {
+                            ComboBox mocapIdCb = actorItem.Items[0] as ComboBox;
+                            actor.MocapId = mocapIdCb.SelectedItem as string;
+                            if (PreviousLevel != null)
+                            {
+                                SetPreviousId(actorItem.Items[1] as TreeViewItem, ref actor);
+                            }
+                        }
+                    }
+                    action.Actors.Add(actor);
                 }
+                Generator.AddNewActionToLevel(action);
+                Close();
+            }
+            catch (ScenarioException ScException)
+            {
+                MessageBox.Show(ScException.Message);
             }
         }
 
@@ -130,69 +138,49 @@ namespace CrowdSimSetupWizard
         {
             _probability = (float)probability_Slider.Value / 100.0f;
             probability_textBlock.Text = _probability.ToString();
-            //save_button.IsEnabled = CheckSaveButtonStatus();
-        }
-
-        private bool CheckSaveButtonStatus()
-        {
-            if (_selectedName != "" && _probability > 0.0f)
-            {
-                if (_selectedName.Equals("Walk") || _selectedName.Equals("Run"))
-                {
-                    return true;
-                }
-                else
-                {
-                    if (_selectedMocapId != "")
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            save_button.IsEnabled = CheckSaveButtonStatus();
         }
 
         private void PrepareActorsTreeView(string actionName)
         {
-            actors_TreeView.Items.Clear();
+            Actors_TreeView.Items.Clear();
 
-            for (int i = 0; i < ActorsNumber; i++)
+            for (int i = 0; i < ActorsNames.Count; i++)
             {
                 TreeViewItem actorItem = new TreeViewItem();
                 actorItem.IsExpanded = true;
-                actorItem.Header = string.Format("Actor {0}", i);
+                actorItem.Header = string.Format("{0}", ActorsNames[i]);
 
                 if (!(_selectedName.Equals("Walk") || _selectedName.Equals("Run")))
                 {
-                    TreeViewItem mocapIdItem = new TreeViewItem();
                     ComboBox mocapIdComboBox = new ComboBox();
                     mocapIdComboBox.IsEditable = true;
                     mocapIdComboBox.IsReadOnly = true;
                     mocapIdComboBox.Text = "Choose mocap index";
                     mocapIdComboBox.ItemsSource = GetAllMocapId(actionName);
-                    mocapIdItem.Header = mocapIdComboBox;
-                    actorItem.Items.Add(mocapIdItem);
+                    actorItem.Items.Add(mocapIdComboBox);
                 }
 
                 if (PreviousLevel != null)
                 {
-                    HashSet<int> prevId = GetPreviousActions(actorItem.Header.ToString());
+                    HashSet<int> prevId = GetPreviousId(actorItem.Header.ToString());
                     TreeViewItem prevItem = new TreeViewItem();
                     prevItem.IsExpanded = true;
                     prevItem.Header = "Previous action/s";
                     foreach (int id in prevId)
                     {
                         CheckBox checkId = new CheckBox();
-                        checkId.Name = id.ToString();
+                        checkId.Name = string.Format("fako_{0}", id.ToString());
+                        checkId.Content = GetActionName(id);
                         prevItem.Items.Add(checkId);
                     }
                     actorItem.Items.Add(prevItem);
                 }
-                actors_TreeView.Items.Add(actorItem);
+                Actors_TreeView.Items.Add(actorItem);
             }
         }
 
-        private HashSet<int> GetPreviousActions(string actorName)
+        private HashSet<int> GetPreviousId(string actorName)
         {
             HashSet<int> previousId = new HashSet<int>();
             foreach (Action action in PreviousLevel.Actions)
@@ -201,14 +189,55 @@ namespace CrowdSimSetupWizard
                 {
                     if (actor.Name.Equals(actorName))
                     {
-                        foreach (int id in actor.PreviousActivitiesIndexes)
-                        {
-                            previousId.Add(id);
-                        } 
+                        previousId.Add(action.Index);
                     }
                 }
             }
             return previousId;
+        }
+
+        private void Actors_TreeView_Initialized(object sender, EventArgs e)
+        {
+            Actors_TreeView.Items.Add(string.Format("Choose animation and probablity."));
+        }
+
+        private void SetPreviousId(TreeViewItem prevItem, ref Actor actor)
+        {
+            List<int> previousId = new List<int>();
+            foreach (CheckBox prevId in prevItem.Items)
+            {
+                if ((bool)prevId.IsChecked)
+                {
+                    string[] index = prevId.Name.Split('_');
+                    previousId.Add(int.Parse(index[1]));
+                }
+            }
+            if (previousId.Count == 0)
+            {
+                throw new ScenarioException("Choose at least one previous action.");
+            }
+            actor.PreviousActivitiesIndexes = previousId.ToArray();
+        }
+
+        private bool CheckSaveButtonStatus()
+        {
+            if (_selectedName.Equals("") || _probability == 0.0f)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private string GetActionName(int id)
+        {
+            foreach (Action action in PreviousLevel.Actions )
+            {
+                if (action.Index == id)
+                {
+                    return action.Name;
+                }
+            }
+            return null;
         }
     }
 }

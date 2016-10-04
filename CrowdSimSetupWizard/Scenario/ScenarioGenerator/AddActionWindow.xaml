@@ -17,11 +17,11 @@
         <ComboBox x:Name="action_MocapId_List_ComboBox" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Width="262" IsEnabled="False" SelectionChanged="action_MocapId_List_ComboBox_SelectionChanged">
         </ComboBox>-->
         <Label x:Name="actor_name_Label" Content="Actors:" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
-        <ScrollViewer x:Name="actors_scrollView" HorizontalAlignment="Left" Height="135" VerticalAlignment="Top" Width="256" Margin="16,151,0,0">
-            <TreeView x:Name="actors_TreeView">
+        <ScrollViewer x:Name="Actors_ScrollView" HorizontalAlignment="Left" Height="135" VerticalAlignment="Top" Width="256" Margin="16,151,0,0">
+            <TreeView x:Name="Actors_TreeView" Initialized="Actors_TreeView_Initialized">
             </TreeView>
         </ScrollViewer>
         <Button x:Name="cancel_button" Content="Cancel" HorizontalAlignment="Left" Margin="16,291,0,0" VerticalAlignment="Top" Width="91" Height="20" Click="cancel_button_Click"/>
-        <Button x:Name="save_button" Content="Save" HorizontalAlignment="Right" Margin="0,291,10,0" VerticalAlignment="Top" Width="91" Height="20" Click="save_button_Click"/>
+        <Button x:Name="save_button" Content="Save" HorizontalAlignment="Right" Margin="0,291,10,0" VerticalAlignment="Top" Width="91" Height="20" Click="save_button_Click" IsEnabled="False"/>
     </Grid>
 </Window>
