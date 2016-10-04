@@ -25,7 +25,7 @@ namespace CrowdSimSetupWizard
         private string _selectedName;
         private string _selectedMocapId;
         private float _probability;
-        private string _animationsPath = WizardWindow.Project + "\\Assets\\Resources\\Animations\\";
+        private string _animationsPath = MainWindow.ProjectPath + "\\Assets\\Resources\\Animations\\";
         private static int _id;
 
         public AddActionWindow()

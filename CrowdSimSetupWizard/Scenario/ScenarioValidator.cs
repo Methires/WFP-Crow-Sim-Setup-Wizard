@@ -375,7 +375,7 @@ namespace CrowdSimSetupWizard
                 return true;
             }
             string fullActionName = string.Format("{0}@{1}", mocapId, name);
-            string animationsPath = WizardWindow.Project + "\\Assets\\Resources\\Animations\\";
+            string animationsPath = MainWindow.ProjectPath + "\\Assets\\Resources\\Animations\\";
             string[] animationFiles = Directory.GetFiles(animationsPath, "*.fbx", SearchOption.AllDirectories);
             for (int i = 0; i < animationFiles.Length; i++)
             {

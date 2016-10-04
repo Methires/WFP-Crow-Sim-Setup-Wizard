@@ -69,5 +69,14 @@ namespace CrowdSimSetupWizard.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C:\\Program Files\\Unity\\Editor\\Unity.exe.
+        /// </summary>
+        internal static string UnityPath {
+            get {
+                return ResourceManager.GetString("UnityPath", resourceCulture);
+            }
+        }
     }
 }

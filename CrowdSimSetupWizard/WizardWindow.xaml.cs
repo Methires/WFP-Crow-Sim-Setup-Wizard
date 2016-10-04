@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using System.Drawing.Imaging;
+using System.Configuration;
+using Microsoft.Win32;
 
 namespace CrowdSimSetupWizard
 {
@@ -82,7 +84,7 @@ namespace CrowdSimSetupWizard
         private string _path = AppDomain.CurrentDomain.BaseDirectory;
         private string _unityPath = "C:\\Program Files\\Unity\\Editor\\Unity.exe";
         //private string _project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
-        public static string Project = AppDomain.CurrentDomain.BaseDirectory + "UnityCrowdSimAndGenerator";
+        private string _project = AppDomain.CurrentDomain.BaseDirectory + "UnityCrowdSimAndGenerator";
         private StringBuilder _modelsFilter;
         private StringBuilder _actionsFilter;
         private BitmapImage _noImage;
@@ -93,37 +95,30 @@ namespace CrowdSimSetupWizard
         private bool _simulationComplete = false;
         private DateTime _simulationStart;
 
+        public string UnityPath
+        {
+            get
+            {
+                return _unityPath;
+            }
 
+            set
+            {
+                _unityPath = value;
+            }
+        }
 
-        public WizardWindow()
+        public WizardWindow(string unityPath, string projectPath)
         {           
             InitializeComponent();
             InitializeData();
-            FindUnity();
+            _unityPath = unityPath;
+            _project = projectPath;
             _data.Tracking = false;
             _data.BoundingBoxes = true;
-            _noImage = GetNoImage();
-
-            
-            
+            _noImage = GetNoImage();                       
         }
-        
-        //private const string keyBase = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths";
-        private void FindUnity()
-        {
-            //string fileName = "Unity.exe";
-
-            //RegistryKey localMachine = Registry.LocalMachine;
-            //RegistryKey fileKey = localMachine.OpenSubKey(string.Format(@"{0}\\{1}", keyBase, fileName));
-            //object result = null;
-            //if (fileKey != null)
-            //{
-            //    result = fileKey.GetValue(string.Empty);
-            //}
-            //fileKey.Close();
-            //string u = (string)result;
-            //_unityPath = u;
-        }
+       
 
        
 
@@ -153,7 +148,7 @@ namespace CrowdSimSetupWizard
 
         private string GetScenePreviewPath(string sceneName)
         {
-            string scenesPath = Project +" \\Assets\\Scenes\\";
+            string scenesPath = _project +" \\Assets\\Scenes\\";
             string[] scenePreviewFiles = Directory.GetFiles(scenesPath, sceneName + ".png", SearchOption.AllDirectories);
             if (scenePreviewFiles.Length != 0)
             {
@@ -254,7 +249,7 @@ namespace CrowdSimSetupWizard
 
         private string GetModelPreviewPath(string modelName)
         {
-            string modelsPath = Project + "\\Assets\\Characters\\";
+            string modelsPath = _project + "\\Assets\\Characters\\";
             string[] modelPreviewFiles = Directory.GetFiles(modelsPath, modelName + ".png", SearchOption.AllDirectories);
             if (modelPreviewFiles.Length != 0)
             {
@@ -297,7 +292,7 @@ namespace CrowdSimSetupWizard
 
             if (result == true)
             {
-                string destPath = string.Format("{0}\\Assets\\Scenes\\{1}", Project, Path.GetFileName(dlg.FileName));
+                string destPath = string.Format("{0}\\Assets\\Scenes\\{1}", _project, Path.GetFileName(dlg.FileName));
                 Directory.CreateDirectory(Path.GetDirectoryName(destPath));
 
                 if (!File.Exists(destPath))
@@ -318,7 +313,7 @@ namespace CrowdSimSetupWizard
 
         private void Generate_Scene_Button_Click(object sender, RoutedEventArgs e)
         {
-            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", Project);
+            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
             _data.Mode = "generation";
             PrepareConfigFile();           
             Process.Start(_unityPath, command);
@@ -335,11 +330,11 @@ namespace CrowdSimSetupWizard
 
             if (result == true)
             {
-                string destPath = string.Format("{0}\\Assets\\Characters\\{1}\\{2}", Project, Path.GetFileNameWithoutExtension(dlg.FileName), Path.GetFileName(dlg.FileName));
+                string destPath = string.Format("{0}\\Assets\\Characters\\{1}\\{2}", _project, Path.GetFileNameWithoutExtension(dlg.FileName), Path.GetFileName(dlg.FileName));
                 Directory.CreateDirectory(Path.GetDirectoryName(destPath));
                 File.Copy(dlg.FileName, destPath);
 
-                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", Project);
+                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
                 Process.Start(_unityPath, command);
                 System.Action refresh = () => GetModelsList();
                 WaitForUnity(ModelsBusyIndicator, "Importing model...", ModelsPage, refresh);               
@@ -354,7 +349,7 @@ namespace CrowdSimSetupWizard
                 _models.Clear();
             }
             _modelsFilter = new StringBuilder();
-            string modelsPath = Project + "\\Assets\\Characters\\";
+            string modelsPath = _project + "\\Assets\\Characters\\";
             string[] modelsFiles = Directory.GetFiles(modelsPath, "*.fbx", SearchOption.AllDirectories);
             _models = new List<ModelFile>();
             for (int i = 0; i < modelsFiles.Length; i++)
@@ -385,7 +380,7 @@ namespace CrowdSimSetupWizard
                 _scenes.Clear();
             }
             //_actionsFilter = new StringBuilder();
-            string scenesPath = Project + "\\Assets\\Scenes\\";
+            string scenesPath = _project + "\\Assets\\Scenes\\";
             string[] sceneFiles = Directory.GetFiles(scenesPath, "*.unity", SearchOption.AllDirectories);
             for (int i = 0; i < sceneFiles.Length; i++)
             {
@@ -413,7 +408,7 @@ namespace CrowdSimSetupWizard
                 _animations.Clear();
             }
             _actionsFilter = new StringBuilder();  
-            string animationsPath = Project + "\\Assets\\Resources\\Animations\\";
+            string animationsPath = _project + "\\Assets\\Resources\\Animations\\";
             string[] animationFiles = Directory.GetFiles(animationsPath, "*.fbx", SearchOption.AllDirectories);
             for (int i = 0; i < animationFiles.Length; i++)
             {
@@ -452,10 +447,10 @@ namespace CrowdSimSetupWizard
                 int atCounter = Path.GetFileNameWithoutExtension(dlg.FileName).Count(x => x == '@');
                 if (atCounter > 0)
                 { 
-                    string destPath = Project + "\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
+                    string destPath = _project + "\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
                     File.Copy(dlg.FileName, destPath, true);
 
-                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", Project);
+                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
                     Process.Start(_unityPath, command);
 
                     System.Action refresh = () => GetAnimationsList();
@@ -651,7 +646,7 @@ namespace CrowdSimSetupWizard
         {
             _data.Models = _modelsFilter.ToString();
             _data.CrowdActions = _actionsFilter.ToString();
-            string configPath = Project + "\\Assets\\config.xml";
+            string configPath = _project + "\\Assets\\config.xml";
             XmlDocument config = new XmlDocument();
             config.Load(configPath);
             XmlElement configElement = config.DocumentElement;
@@ -708,7 +703,7 @@ namespace CrowdSimSetupWizard
             _data.Mode = "simulation";           
             PrepareConfigFile();
 
-            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", Project);
+            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
             Process.Start(_unityPath, command);
 
             abortSimButton.IsEnabled = true;
