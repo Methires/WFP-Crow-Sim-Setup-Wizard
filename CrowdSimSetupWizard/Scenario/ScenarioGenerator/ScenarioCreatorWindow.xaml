@@ -19,7 +19,7 @@
         <Button x:Name="Remove_Action_Button" Content="Remove action" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Remove_Action_Button_Click"/>
         <TextBlock x:Name="Status_Header_TextBlock" HorizontalAlignment="Left" Height="25" Margin="10,201,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Width="100" FontSize="16"/>
         <TextBlock x:Name="Error_Message_TextBlock" HorizontalAlignment="Left" Height="120" Margin="9,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" FontSize="10"/>
-        <Button x:Name="Save_Scenario_Button" Content="Save scenario" HorizontalAlignment="Left" Margin="10,405,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False"/>
+        <Button x:Name="Save_Scenario_Button" Content="Save scenario" HorizontalAlignment="Left" Margin="10,405,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Save_Scenario_Button_Click"/>
         <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Left" Margin="10,440,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Cancel_Button_Click"/>
         <ScrollViewer x:Name="Scenario_ScrollView" Grid.Column="1" HorizontalAlignment="Left" Height="460" Margin="10,10,0,0" VerticalAlignment="Top" Width="280">
             <TreeView x:Name="Scenario_TreeView" SelectedItemChanged="Scenario_TreeView_SelectedItemChanged">

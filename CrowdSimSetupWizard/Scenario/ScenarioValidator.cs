@@ -432,5 +432,50 @@ namespace CrowdSimSetupWizard
                 }
             }
         }
+
+        //NOT TESTED!
+        public bool ValidateGeneratedScenario(List<Level> levels, List<string> actorsNames, out string status )
+        {
+            try
+            {
+                CheckForEmptyLevel(levels);
+                CheckActorsInLevels(levels, actorsNames);
+                //No need to check that in generated scenario?
+                //CheckActionsId(levels);
+                for (int i = 0; i < levels.Count; i++)
+                {
+                    foreach (string actor in GetActorNames(levels[0]))
+                    {
+                        if (i != 0)
+                        {
+                            CheckActionsForActor(GetActorsActions(levels[i], actor), levels[i - 1], actor, i);
+                        }
+                        else
+                        {
+                            CheckActionsForActor(GetActorsActions(levels[i], actor), null, actor, i);
+                        }
+                    }
+                }
+                status = "Validated.";
+                return true;
+            }
+            catch (ScenarioException e)
+            {
+                status = e.Message;
+                return false;
+            }
+        }
+
+        //NOT TESTED!
+        private void CheckForEmptyLevel(List<Level> levels)
+        {
+            foreach (Level level in levels)
+            {
+                if (level.Actions.Count == 0)
+                {
+                    throw new ScenarioException("Level cannot be empty.");
+                }
+            }
+        }
     }
 }
