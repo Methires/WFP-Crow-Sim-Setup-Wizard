@@ -25,7 +25,7 @@ namespace CrowdSimSetupWizard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Filedfghdh\\Unity\\Editor\\Unity.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Unity\\Editor\\Unity.exe")]
         public string UnityPath {
             get {
                 return ((string)(this["UnityPath"]));

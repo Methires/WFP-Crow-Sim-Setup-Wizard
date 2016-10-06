@@ -74,7 +74,7 @@ namespace CrowdSimSetupWizard
             //Mode
             _data.Mode = "simulation";
             //Generation
-            _data.SceneSize = (int)Scene_Size_Value_Picker.Value;
+            _data.SceneSize = 5;//(int)Scene_Size_Value_Picker.Value;
         }
 
         private static ConfigData _data;
@@ -118,10 +118,7 @@ namespace CrowdSimSetupWizard
             _data.BoundingBoxes = true;
             _noImage = GetNoImage();                       
         }
-       
-
-       
-
+             
         private void Scene_List_Checked(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.RadioButton action = sender as System.Windows.Controls.RadioButton;
@@ -536,6 +533,27 @@ namespace CrowdSimSetupWizard
             defActors.ShowDialog();
         }
 
+
+        private void Scene_Size_ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            string value = (string)((System.Windows.Controls.ComboBoxItem)Scene_Size_ComboBox.SelectedItem).Content;
+
+            switch (value)
+            {
+                case "Small":
+                    _data.SceneSize = 5;
+                    break;
+                case "Medium":
+                    _data.SceneSize = 10;
+                    break;
+                case "Large":
+                    _data.SceneSize = 15;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void Value_Picker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (sender.Equals(Length_Value_Picker))
@@ -562,10 +580,10 @@ namespace CrowdSimSetupWizard
             {
                 _data.FrameRate = (int)Framerate_Value_Picker.Value;
             }
-            else if (sender.Equals(Scene_Size_Value_Picker))
-            {
-                _data.SceneSize = (int)Scene_Size_Value_Picker.Value;
-            }
+            //else if (sender.Equals(Scene_Size_Value_Picker))
+            //{
+            //    _data.SceneSize = (int)Scene_Size_Value_Picker.Value;
+            //}
             else if (sender.Equals(Buffer_Size_Value_Picker))
             {
                 _data.BufferSize = (int)Buffer_Size_Value_Picker.Value;
@@ -878,7 +896,6 @@ namespace CrowdSimSetupWizard
                 return null;
             }          
         }
-
 
     }
 }
