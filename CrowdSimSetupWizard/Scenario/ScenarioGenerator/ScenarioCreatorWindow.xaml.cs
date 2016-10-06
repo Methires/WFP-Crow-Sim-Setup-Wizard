@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.Win32;
 using System;
-using System.Xml.Linq;
+using System.Xml;
 
 namespace CrowdSimSetupWizard
 {
@@ -56,19 +56,40 @@ namespace CrowdSimSetupWizard
                     TreeViewItem tvAction = new TreeViewItem();
                     tvAction.Name = string.Format("action_id_{0}", action.Index);
                     tvAction.Header = string.Format("{0} | Probability: {1}", action.Name, action.Probability);
+                    tvAction.IsExpanded = true;
                     tvLevel.Items.Add(tvAction);
-
-                    //NOT TESTED
-                    //foreach (Actor actor in action.Actors)
-                    //{
-                    //    TreeViewItem tvActor = new TreeViewItem();
-                    //    tvActor.Header = actor.Name;
-                    //    tvActor.IsEnabled = false;
-                    //    tvAction.Items.Add(tvActor);
-                    //}
+                    
+                    foreach (Actor actor in action.Actors)
+                    {
+                        TreeViewItem tvActor = new TreeViewItem();
+                        tvActor.Header = actor.Name + GetPreviousActionsNames(actor, _levels.IndexOf(level), _levels);
+                        tvActor.IsEnabled = false;
+                        tvAction.Items.Add(tvActor);
+                    }
                 }
                 Scenario_TreeView.Items.Add(tvLevel);
             }
+        }
+
+        private string GetPreviousActionsNames(Actor actor, int id, List<Level> levels)
+        {
+            string actionNames = "";
+            if (id - 1 >= 0)
+            {
+                actionNames += " Previous: ";
+                foreach (Action action in levels[id - 1].Actions)
+                {
+                    foreach (int prevId in actor.PreviousActivitiesIndexes)
+                    {
+                        if (action.Index == prevId)
+                        {
+                            actionNames += string.Format("{0} ", action.Name);
+                        }
+                    }
+                }
+            }
+
+            return actionNames;
         }
 
         private void Scenario_TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -87,7 +108,6 @@ namespace CrowdSimSetupWizard
                     Add_Action_Button.IsEnabled = false;
                 }
 
-                //NOT TESTED
                 if (_selectedItem.Parent.GetType() == typeof(TreeViewItem))
                 {
                     Remove_Action_Button.IsEnabled = true;
@@ -123,7 +143,6 @@ namespace CrowdSimSetupWizard
 
         private void Remove_Action_Button_Click(object sender, RoutedEventArgs e)
         {
-            //NOT TESTED
             TreeViewItem parent = _selectedItem.Parent as TreeViewItem;
             string[] actionItemName = _selectedItem.Name.Split('_');
             string[] levelItemName = parent.Name.Split('_');
@@ -139,6 +158,7 @@ namespace CrowdSimSetupWizard
                 }
             }
             _levels[levelIndex].Actions.Remove(actionToRemove);
+            UpdateTreeView();
             ValidateChange();
             Remove_Action_Button.IsEnabled = false;
         }
@@ -157,7 +177,6 @@ namespace CrowdSimSetupWizard
             ValidateChange();
         }
 
-        //NOT TESTED
         private void ValidateChange()
         {
             ScenarioValidator validator = new ScenarioValidator();
@@ -173,8 +192,7 @@ namespace CrowdSimSetupWizard
                 Error_Message_TextBlock.Foreground = new SolidColorBrush(Colors.Red);
             }
         }
-
-        //NOT TESTED
+ 
         private void Save_Scenario_Button_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
@@ -186,39 +204,39 @@ namespace CrowdSimSetupWizard
 
             if (result == true)
             {
-                //string fileName = dlg.FileName;
                 PrepareXmlFile(dlg.FileName);
             }
             Close();
         }
 
-        //NOT TESTED
         private void PrepareXmlFile(string fileName)
         {
-            XDocument scenario = new XDocument();
-            scenario.Add("scenario");
-            var scenarioElemenet = scenario.Element("scenario");
+            XmlDocument doc = new XmlDocument();
+            XmlElement scenarioElement = (XmlElement)doc.AppendChild(doc.CreateElement("scenario"));
             foreach (Level level in _levels)
             {
-                XElement levelElement = new XElement("level", new XAttribute("id", level.Index));
+                XmlElement levelElement = (XmlElement)scenarioElement.AppendChild(doc.CreateElement("level"));
+                levelElement.SetAttribute("id", level.Index.ToString());
                 foreach (Action action in level.Actions)
                 {
-                    XElement actionElement = new XElement("action", new XAttribute("prob", action.Probability), new XAttribute("name", action.Name), new XAttribute("id", action.Index));
+                    XmlElement actionElement = (XmlElement)levelElement.AppendChild(doc.CreateElement("action"));
+                    actionElement.SetAttribute("prob", action.Probability.ToString());
+                    actionElement.SetAttribute("name", action.Name);
+                    actionElement.SetAttribute("id", action.Index.ToString());
                     foreach (Actor actor in action.Actors)
                     {
-                        XElement actorElement = new XElement("actor", new XAttribute("mocapId", actor.MocapId));
+                        XmlElement actorElement = (XmlElement)actionElement.AppendChild(doc.CreateElement("actor"));
+                        actorElement.SetAttribute("name", actor.Name);
+                        actorElement.SetAttribute("mocapId", actor.MocapId);
                         foreach (int prevId in actor.PreviousActivitiesIndexes)
                         {
-                            XElement prevElement = new XElement("prev", new XAttribute("id", prevId));
-                            actorElement.Add(prevElement);
+                            XmlElement prevElement = (XmlElement)actorElement.AppendChild(doc.CreateElement("prev"));
+                            prevElement.SetAttribute("id", prevId.ToString());
                         }
-                        actionElement.Add(actorElement);
                     }
-                    levelElement.Add(actionElement);
                 }
-                scenarioElemenet.Add(levelElement);
             }
-            scenario.Save(fileName);
+            doc.Save(fileName);
         }
     }
 }

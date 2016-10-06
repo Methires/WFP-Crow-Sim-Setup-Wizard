@@ -22,11 +22,11 @@ namespace CrowdSimSetupWizard
                 {
                     throw new ScenarioException("Invalid name for main markup.");
                 }
-                else if (!(scenario.Attributes.Count < 2))
+                else if (scenario.Attributes.Count > 1)
                 {
                     throw new ScenarioException("\"Scenario\" can have only one attribute.");
                 }
-                else if (!scenario.HasAttribute("name"))
+                else if (scenario.Attributes.Count == 1 && !scenario.HasAttribute("name"))
                 {
                     throw new ScenarioException("Invalid attribute name for \"scenario\".");
                 }
@@ -100,27 +100,13 @@ namespace CrowdSimSetupWizard
                                 continue;
                             }
 
-                            if (action.Attributes[nameAttributeId].Value.ToLower().Equals("walk") || action.Attributes[nameAttributeId].Value.ToLower().Equals("run"))
+                            if (actor.Attributes.Count != 2)
                             {
-                                if (actor.Attributes.Count != 1)
-                                {
-                                    throw new ScenarioException(string.Format("Invalid attribute in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
-                                }
-                                else if (!(FindAttributeAndIndex(actor.Attributes, "name", out actorNameAttributeId)))
-                                {
-                                    throw new ScenarioException(string.Format("Invalid attribute name in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
-                                }
+                                throw new ScenarioException(string.Format("Invalid attributes in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
                             }
-                            else
+                            else if (!(FindAttributeAndIndex(actor.Attributes, "name", out actorNameAttributeId) && FindAttributeAndIndex(actor.Attributes, "mocapId", out mocapIdAttributeId)))
                             {
-                                if (actor.Attributes.Count != 2)
-                                {
-                                    throw new ScenarioException(string.Format("Invalid attributes in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
-                                }
-                                else if (!(FindAttributeAndIndex(actor.Attributes, "name", out actorNameAttributeId) && FindAttributeAndIndex(actor.Attributes, "mocapId", out mocapIdAttributeId)))
-                                {
-                                    throw new ScenarioException(string.Format("Invalid attributes names in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
-                                }
+                                throw new ScenarioException(string.Format("Invalid attributes names in \"actor\". Check \"actor\" number {0} in \"action\" number {1} in \"level\" number {2}.", k, j, i));
                             }
 
                             if (i != 0 && actor.ChildNodes.Count == 0)
@@ -370,7 +356,7 @@ namespace CrowdSimSetupWizard
 
         private bool CheckActionName(string name, string mocapId)
         {
-            if (name.Equals("walk") || name.Equals("run"))
+            if (name.ToLower().Equals("walk") || name.ToLower().Equals("run"))
             {
                 return true;
             }
@@ -394,22 +380,35 @@ namespace CrowdSimSetupWizard
         private void CheckProbability(List<Action> actions, string actorName, int levelId)
         {
             HashSet<int> previousId = new HashSet<int>();
+            float probability = 0.0f;
             foreach (Action action in actions)
             {
                 foreach (Actor actor in action.Actors)
                 {
                     if (actor.Name.Equals(actorName))
                     {
-                        foreach (int id in actor.PreviousActivitiesIndexes)
+                        if (levelId == 0)
                         {
-                            previousId.Add(id);
+                            probability += action.Probability;
                         }
+                        else
+                        {
+                            foreach (int id in actor.PreviousActivitiesIndexes)
+                            {
+                                previousId.Add(id);
+                            }
+                        }
+                        break;
                     }
                 }
             }
+            if (levelId == 0 && probability != 1.0f)
+            {
+                throw new ScenarioException(string.Format("Actions' probability for {0} isn't equal 1. Check level number {1}.", actorName, levelId));
+            }
             foreach (int id in previousId)
             {
-                float probability = 0.0f;
+                probability = 0.0f;
                 foreach (Action action in actions)
                 {
                     foreach (Actor actor in action.Actors)
@@ -434,17 +433,15 @@ namespace CrowdSimSetupWizard
         }
 
         //NOT TESTED!
-        public bool ValidateGeneratedScenario(List<Level> levels, List<string> actorsNames, out string status )
+        public bool ValidateGeneratedScenario(List<Level> levels, List<string> actorsNames, out string status)
         {
             try
             {
                 CheckForEmptyLevel(levels);
                 CheckActorsInLevels(levels, actorsNames);
-                //No need to check that in generated scenario?
-                //CheckActionsId(levels);
                 for (int i = 0; i < levels.Count; i++)
                 {
-                    foreach (string actor in GetActorNames(levels[0]))
+                    foreach (string actor in actorsNames)
                     {
                         if (i != 0)
                         {
@@ -466,14 +463,13 @@ namespace CrowdSimSetupWizard
             }
         }
 
-        //NOT TESTED!
         private void CheckForEmptyLevel(List<Level> levels)
         {
             foreach (Level level in levels)
             {
                 if (level.Actions.Count == 0)
                 {
-                    throw new ScenarioException("Level cannot be empty.");
+                    throw new ScenarioException(string.Format("Level cannot be empty. Check level number {0}", levels.IndexOf(level)));
                 }
             }
         }

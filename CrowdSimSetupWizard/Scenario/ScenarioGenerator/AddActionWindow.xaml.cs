@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CrowdSimSetupWizard
 {
@@ -39,17 +31,30 @@ namespace CrowdSimSetupWizard
             string[] animationFiles = Directory.GetFiles(_animationsPath, "*.fbx", SearchOption.AllDirectories);
             for (int i = 0; i < animationFiles.Length; i++)
             {
-                animationFiles[i] = System.IO.Path.GetFileNameWithoutExtension(animationFiles[i]);
+                animationFiles[i] = Path.GetFileNameWithoutExtension(animationFiles[i]);
             }
-            HashSet<string> _actions = new HashSet<string>();
-            _actions.Add("Walk");
-            _actions.Add("Run");
+            List<string> allActions = new List<string>();
+            List<string> actionsToShow = new List<string>();
+            allActions.Add("Walk");
+            allActions.Add("Run");
             foreach (string name in animationFiles)
             {
                 string[] animation = name.Split('@');
-                _actions.Add(animation[animation.Length - 1]);
+                allActions.Add(animation[animation.Length - 1]);
             }
-            action_Name_List_ComboBox.ItemsSource = _actions;
+            var actionsOccurences = from x in allActions
+                    group x by x into g
+                    let count = g.Count()
+                    orderby count descending
+                    select new { Value = g.Key, Count = count };
+            foreach (var x in actionsOccurences)
+            {
+                if (x.Count == ActorsNames.Count)
+                {
+                    actionsToShow.Add(x.Value);
+                }
+            }
+            action_Name_List_ComboBox.ItemsSource = actionsToShow;
         }
 
         private void action_Name_List_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -117,6 +122,10 @@ namespace CrowdSimSetupWizard
                         {
                             ComboBox mocapIdCb = actorItem.Items[0] as ComboBox;
                             actor.MocapId = mocapIdCb.SelectedItem as string;
+                            if (mocapIdCb.SelectedItem == null)
+                            {
+                                throw new ScenarioException(string.Format("Choose MocapId for {0}", actor.Name));
+                            }
                             if (PreviousLevel != null)
                             {
                                 SetPreviousId(actorItem.Items[1] as TreeViewItem, ref actor);
