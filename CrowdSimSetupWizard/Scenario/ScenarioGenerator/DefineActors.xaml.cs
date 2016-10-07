@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System;
 using System.Linq;
+using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace CrowdSimSetupWizard
 {
@@ -15,7 +16,7 @@ namespace CrowdSimSetupWizard
         {
             _actorsNumber = 1;
             _customNames = false;
-            InitializeComponent();
+            InitializeComponent();          
         }
 
         private void Actor_Number_Picker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -43,16 +44,16 @@ namespace CrowdSimSetupWizard
                 if (_customNames)
                 {
                     actorsNames = new List<string>();
-                    foreach (TreeViewItem item in Actor_Names_TreeView.Items)
+                    foreach (TextBox item in Actor_Names_TreeView.Items)
                     {
-                        TextBox itemTB = item.Header as TextBox;
-                        if (itemTB.Text.Equals(""))
+                        //TextBox itemTB = item.Header as TextBox;
+                        if (item.Text.Equals(""))
                         {
                             throw new ScenarioException("Empty string cannot be an actor's name.");
                         }
                         else
                         {
-                            actorsNames.Add(itemTB.Text);
+                            actorsNames.Add(item.Text);
                         }
                         if (actorsNames.Count != actorsNames.Distinct().Count())
                         {
@@ -73,7 +74,7 @@ namespace CrowdSimSetupWizard
             }
             catch (ScenarioException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error" ,MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -104,13 +105,19 @@ namespace CrowdSimSetupWizard
             for (int i = Actor_Names_TreeView.Items.Count; i < _actorsNumber; i++)
             {
                 TextBox actorTextBox = new TextBox();
+                actorTextBox.Name = string.Format("Actor{0}", i);
                 actorTextBox.Text = string.Format("Actor{0}", i);
                 actorTextBox.MaxLines = actorTextBox.MinLines = 1;
-                actorTextBox.MaxLength = 20;
-                TreeViewItem item = new TreeViewItem();
-                item.Header = actorTextBox;
-                Actor_Names_TreeView.Items.Add(item);
+                actorTextBox.MaxLength = 15;
+                actorTextBox.PreviewTextInput += new TextCompositionEventHandler(actorTextBox_PreviewTextInput);
+                Actor_Names_TreeView.Items.Add(actorTextBox);
             }
+        }
+
+        private void actorTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9A-Za-z]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
         private List<string> GetDefaultNames()

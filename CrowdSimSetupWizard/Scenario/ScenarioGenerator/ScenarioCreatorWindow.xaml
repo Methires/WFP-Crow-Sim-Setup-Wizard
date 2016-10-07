@@ -7,11 +7,11 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="CrowdSimSetupWizard.ScenarioCreatorWindow"
         mc:Ignorable="d"
         Title="Create new scenario" Height="Auto" Width="Auto" ResizeMode="CanMinimize" Background="#ececec" SizeToContent="WidthAndHeight">
-    <Grid Height="480" Width="720">
+    <Grid Height="480" Width="420">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120*"/>
             <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="300*"/>
+
         </Grid.ColumnDefinitions>
         <Button x:Name="Add_Level_Button" Content="Add level" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Click="Add_Level_Button_Click"/>
         <Button x:Name="Remove_Level" Content="Remove last" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="100" Height="30" IsEnabled="False" Click="Remove_Level_Click"/>
@@ -25,6 +25,5 @@
             <TreeView x:Name="Scenario_TreeView" SelectedItemChanged="Scenario_TreeView_SelectedItemChanged">
             </TreeView>
         </ScrollViewer>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2" HorizontalAlignment="Left" Height="460" Margin="10,10,0,0" VerticalAlignment="Top" Width="270"/>
     </Grid>
 </Window>

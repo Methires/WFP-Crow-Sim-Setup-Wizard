@@ -124,7 +124,7 @@ namespace CrowdSimSetupWizard
                             actor.MocapId = mocapIdCb.SelectedItem as string;
                             if (mocapIdCb.SelectedItem == null)
                             {
-                                throw new ScenarioException(string.Format("Choose MocapId for {0}", actor.Name));
+                                throw new ScenarioException(string.Format("Choose Mocap index for {0}", actor.Name));
                             }
                             if (PreviousLevel != null)
                             {
@@ -139,7 +139,7 @@ namespace CrowdSimSetupWizard
             }
             catch (ScenarioException ScException)
             {
-                MessageBox.Show(ScException.Message);
+                MessageBox.Show(ScException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

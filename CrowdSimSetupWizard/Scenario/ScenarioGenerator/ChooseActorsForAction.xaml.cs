@@ -47,7 +47,7 @@ namespace CrowdSimSetupWizard
             }
             catch (ScenarioException ScEx)
             {
-                MessageBox.Show(ScEx.Message);
+                MessageBox.Show(ScEx.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

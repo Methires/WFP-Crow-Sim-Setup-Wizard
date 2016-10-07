@@ -162,6 +162,7 @@ namespace CrowdSimSetupWizard
 
                 SceneBusyIndicator.IsBusy = false;
                 ScenePage.CanSelectNextPage = true;
+                SetUnityDependentControlls(true);
             };
 
             unitySpy.RunWorkerAsync();
@@ -606,6 +607,7 @@ namespace CrowdSimSetupWizard
         {            
             busyIndicator.IsBusy = true;
             page.CanSelectNextPage = false;
+            page.CanSelectPreviousPage = false;
             busyIndicator.BusyContent = busyMessage;
             SetUnityDependentControlls(false);
             BackgroundWorker unitySpy = new BackgroundWorker();
@@ -625,6 +627,7 @@ namespace CrowdSimSetupWizard
             {
                 busyIndicator.IsBusy = false;
                 page.CanSelectNextPage = true;
+                page.CanSelectPreviousPage = true;
                 refershView();
                 SetUnityDependentControlls(true);
             };
