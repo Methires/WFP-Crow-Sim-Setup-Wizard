@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CrowdSimSetupWizard"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Crowd Simulator Setup" Height="350" Width="525" ResizeMode="CanMinimize">
-    <Grid>
-    </Grid>
+    <xctk:BusyIndicator x:Name="MainBusyIndicator">
+        <Grid>
+        </Grid>
+    </xctk:BusyIndicator>
 </Window>

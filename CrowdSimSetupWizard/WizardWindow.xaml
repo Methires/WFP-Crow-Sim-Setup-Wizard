@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:CrowdSimSetupWizard"
         mc:Ignorable="d"
-        Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize">
+        Title="Crowd Simulation Setup" Height="350" Width="525" ResizeMode="CanMinimize" ContentRendered="Window_ContentRendered">
     <Grid>
         <xctk:Wizard FinishButtonClosesWindow="True" Grid.ColumnSpan="2">
             <xctk:WizardPage x:Name="ScenePage" 

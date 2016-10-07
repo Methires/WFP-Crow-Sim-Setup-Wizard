@@ -74,7 +74,7 @@ namespace CrowdSimSetupWizard
             //Mode
             _data.Mode = "simulation";
             //Generation
-            _data.SceneSize = 5;//(int)Scene_Size_Value_Picker.Value;
+            _data.SceneSize = 5;
         }
 
         private static ConfigData _data;
@@ -83,17 +83,19 @@ namespace CrowdSimSetupWizard
         private List<SceneFile> _scenes;
         private string _path = AppDomain.CurrentDomain.BaseDirectory;
         private string _unityPath = "C:\\Program Files\\Unity\\Editor\\Unity.exe";
-        //private string _project = AppDomain.CurrentDomain.BaseDirectory + "Unity-CrowdSim-Prototype";
         private string _project = AppDomain.CurrentDomain.BaseDirectory + "UnityCrowdSimAndGenerator";
         private StringBuilder _modelsFilter;
         private StringBuilder _actionsFilter;
         private BitmapImage _noImage;
         private bool _unityKilled = false;
-        private string _screenshotDirectory = AppDomain.CurrentDomain.BaseDirectory + "Screenshots";//"D:/Screenshots";
+        private string _screenshotDirectory = AppDomain.CurrentDomain.BaseDirectory + "Screenshots";
         private DirectoryInfo _screenshotDirInfo;
         private BackgroundWorker _bw;
         private bool _simulationComplete = false;
         private DateTime _simulationStart;
+
+        private bool _unityProjectExists = false;
+        private bool _unityFound = false;
 
         public string UnityPath
         {
@@ -118,7 +120,109 @@ namespace CrowdSimSetupWizard
             _data.BoundingBoxes = true;
             _noImage = GetNoImage();                       
         }
-             
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            CheckUnityDependentPaths();
+        }
+
+        private void CheckUnityDependentPaths()
+        {
+            BackgroundWorker unitySpy = new BackgroundWorker();
+            SceneBusyIndicator.BusyContent = "Checking necessary directories...";
+            SceneBusyIndicator.IsBusy = true;
+            ScenePage.CanSelectNextPage = false;
+            SetUnityDependentControlls(false);
+
+            unitySpy.DoWork += (o, ea) =>
+            {
+                _unityFound = FindUnity();
+                _unityProjectExists = UnityProjectExists();
+            };
+
+            unitySpy.RunWorkerCompleted += (o, ea) =>
+            {
+                if (!_unityProjectExists)
+                {
+                    var Result = System.Windows.MessageBox.Show("Unity project appears to be missinig from working directory!", "Unity project missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (Result == MessageBoxResult.OK)
+                    {
+                        Close();
+                    }
+                }
+
+                if (!_unityFound)
+                {
+                    var Result = System.Windows.MessageBox.Show("Could not find Unity.exe. Please make sure that Unity is installed on your machine.", "Unity.exe missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (Result == MessageBoxResult.OK)
+                    {
+                        Close();
+                    }
+                }
+
+                SceneBusyIndicator.IsBusy = false;
+                ScenePage.CanSelectNextPage = true;
+            };
+
+            unitySpy.RunWorkerAsync();
+        }
+
+        private bool FindUnity()
+        {
+            var savedPath = Properties.Settings.Default.UnityPath;
+            if (File.Exists(savedPath))
+            {
+                _unityPath = savedPath;
+                return true;
+            }
+
+            bool unityFound = false;
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            List<string> possibleDirectories = new List<string>();
+            foreach (var drive in allDrives)
+            {
+                if (drive.DriveType == DriveType.Fixed)
+                {
+                    unityFound = FindUnityAtDir(drive.Name);
+                    if (unityFound)
+                    {
+                        break;
+                    }
+                }
+            }
+            return unityFound;
+        }
+
+        private bool FindUnityAtDir(string startingDir)
+        {
+            bool unityFound = false;
+            string fileName = "Unity.exe";
+            string directory = "Unity";
+
+            string startPath = startingDir;
+            List<string> possibleDirectories = SafeFileEnumerator.EnumerateDirectories(startPath, directory, SearchOption.AllDirectories).ToList();
+            List<string> possibleFiles;
+            foreach (string dir in possibleDirectories)
+            {
+                possibleFiles = SafeFileEnumerator.EnumerateFiles(dir, fileName, SearchOption.AllDirectories).ToList();
+                if (possibleFiles.Count > 0)
+                {
+                    _unityPath = possibleFiles.FirstOrDefault();
+                    Properties.Settings.Default.UnityPath = _unityPath;
+                    Properties.Settings.Default.Save();
+                    unityFound = true;
+                    break;
+                }
+            }
+
+            return unityFound;
+        }
+
+        private bool UnityProjectExists()
+        {
+            return Directory.Exists(MainWindow.ProjectPath);
+        }
+
         private void Scene_List_Checked(object sender, RoutedEventArgs e)
         {
             System.Windows.Controls.RadioButton action = sender as System.Windows.Controls.RadioButton;
@@ -341,6 +445,11 @@ namespace CrowdSimSetupWizard
 
         private void GetModelsList()
         {
+            if (!UnityProjectExists())
+            {
+                return;
+            }
+
             if (_models != null)
             {
                 _models.Clear();
@@ -372,6 +481,11 @@ namespace CrowdSimSetupWizard
          
         private void GetScenesList()
         {
+            if (!UnityProjectExists())
+            {
+                return;
+            }
+
             if (_scenes != null)
             {
                 _scenes.Clear();
@@ -400,6 +514,11 @@ namespace CrowdSimSetupWizard
 
         private void GetAnimationsList()
         {
+            if (!UnityProjectExists())
+            {
+                return;
+            }
+
             if (_animations != null)
             {
                 _animations.Clear();
@@ -897,5 +1016,6 @@ namespace CrowdSimSetupWizard
             }          
         }
 
+       
     }
 }
