@@ -120,7 +120,7 @@
                             <ListBox x:Name="Actions_List" Initialized="Animations_List_Initialized">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click"/>
+                                        <CheckBox Content="{Binding FileName}" Click="Actions_CheckBox_Click" IsEnabled="{Binding Enabled}"/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

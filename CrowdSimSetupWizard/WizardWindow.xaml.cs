@@ -526,14 +526,36 @@ namespace CrowdSimSetupWizard
             _actionsFilter = new StringBuilder();  
             string animationsPath = _project + "\\Assets\\Resources\\Animations\\";
             string[] animationFiles = Directory.GetFiles(animationsPath, "*.fbx", SearchOption.AllDirectories);
+            string[] actionNames = new string[animationFiles.Length];
             for (int i = 0; i < animationFiles.Length; i++)
             {
                 animationFiles[i] = Path.GetFileNameWithoutExtension(animationFiles[i]);
+                string[] animationName = animationFiles[i].Split('@');
+                actionNames[i] = animationName[animationName.Length - 1];
             }
+            var actionsOccurences = from x in actionNames
+                                    group x by x into g
+                                    let count = g.Count()
+                                    orderby count descending
+                                    select new { Value = g.Key, Count = count };
             _animations = new List<AnimationFile>();
             foreach (string file in animationFiles)
             {
-                _animations.Add(new AnimationFile() { FileName = file });
+                string[] name = file.Split('@');
+                foreach (var action in actionsOccurences)
+                {
+                    if (name[name.Length - 1].Equals(action.Value))
+                    {
+                        if (action.Count == 1)
+                        {
+                            _animations.Add(new AnimationFile() { FileName = file, Enabled = true });
+                        }
+                        else
+                        {
+                            _animations.Add(new AnimationFile() { FileName = file, Enabled = false });
+                        }
+                    }
+                }
             }
             Actions_List.ItemsSource = _animations;
         }
