@@ -10,7 +10,7 @@ namespace CrowdSimSetupWizard
 {
     class ScenarioValidator
     {
-        public bool ValidateScenario(string path)
+        public bool ValidateScenario(string path, out List<Level> levelList)
         {
             try
             {
@@ -174,11 +174,13 @@ namespace CrowdSimSetupWizard
                     }
                 }
 
+                levelList = levels;
                 return true;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                levelList = null;
                 return false;
             }
         }

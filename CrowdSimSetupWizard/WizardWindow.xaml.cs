@@ -12,6 +12,7 @@ using System.Xml;
 using System.Drawing.Imaging;
 using System.Configuration;
 using Microsoft.Win32;
+using System.Windows.Controls;
 
 namespace CrowdSimSetupWizard
 {
@@ -654,21 +655,72 @@ namespace CrowdSimSetupWizard
             {
                 string fileName = dlg.FileName;
                 ScenarioValidator validator = new ScenarioValidator();
-                if (validator.ValidateScenario(fileName))
+                List<Level> levels;
+                if (validator.ValidateScenario(fileName, out levels))
                 {
                     _data.ScenarioFilePath = fileName;
                     Scenario_File_Path.Text = fileName;
-                    File_Contents.Text = File.ReadAllText(fileName);
+                    UpdateScenarioTreeView(levels);
                     ScenarioPage.CanSelectNextPage = true;
                 }
                 else
                 {
                     _data.ScenarioFilePath = "";
                     Scenario_File_Path.Text = "";
-                    File_Contents.Text = "";
+                    Scenario_Preview_TreeView.Items.Clear();
                     ScenarioPage.CanSelectNextPage = false;
                 }
             }
+        }
+
+        private void UpdateScenarioTreeView(List<Level> levels)
+        {
+            Scenario_Preview_TreeView.Items.Clear();
+            foreach (Level level in levels)
+            {
+                TreeViewItem tvLevel = new TreeViewItem();
+                tvLevel.Name = string.Format("level_id_{0}", level.Index);
+                tvLevel.Header = string.Format("Level: {0}", level.Index.ToString());
+                tvLevel.IsExpanded = true;
+                foreach (Action action in level.Actions)
+                {
+                    TreeViewItem tvAction = new TreeViewItem();
+                    tvAction.Name = string.Format("action_id_{0}", action.Index);
+                    tvAction.Header = string.Format("{0} | Probability: {1}", action.Name, action.Probability);
+                    tvAction.IsExpanded = true;
+                    tvLevel.Items.Add(tvAction);
+
+                    foreach (Actor actor in action.Actors)
+                    {
+                        TreeViewItem tvActor = new TreeViewItem();
+                        tvActor.Header = actor.Name + GetPreviousActionsNames(actor, levels.IndexOf(level), levels);
+                        tvActor.IsEnabled = false;
+                        tvAction.Items.Add(tvActor);
+                    }
+                }
+                Scenario_Preview_TreeView.Items.Add(tvLevel);
+            }
+        }
+
+        private string GetPreviousActionsNames(Actor actor, int id, List<Level> levels)
+        {
+            string actionNames = "";
+            if (id - 1 >= 0)
+            {
+                actionNames += " Previous: ";
+                foreach (Action action in levels[id - 1].Actions)
+                {
+                    foreach (int prevId in actor.PreviousActivitiesIndexes)
+                    {
+                        if (action.Index == prevId)
+                        {
+                            actionNames += string.Format("{0} ", action.Name);
+                        }
+                    }
+                }
+            }
+
+            return actionNames;
         }
 
         private void Create_Scenario_Button_Click(object sender, RoutedEventArgs e)

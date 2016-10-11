@@ -50,7 +50,7 @@
                                 <ComboBoxItem Content="Large"/>
                             </ComboBox>
                             <Label x:Name="Scene_Size_Label" Content="Scene size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="144,10,0,0"/>
-                            
+
                         </Grid>
                         <Grid x:Name="Scene_Conditions" HorizontalAlignment="Right" Height="262" VerticalAlignment="Top" Width="115">
                             <TextBlock x:Name="Scene_Conditions_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Conditions" VerticalAlignment="Top" Width="95" Margin="10,0,0,0"/>
@@ -147,7 +147,7 @@
                     </Grid>
                     <Grid x:Name="File_Preview" HorizontalAlignment="Left" Height="170" Margin="10,83,0,0" VerticalAlignment="Top" Width="271">
                         <ScrollViewer x:Name="File_ScrolView" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
-                            <TextBlock x:Name="File_Contents" FontFamily="Consolas" FontSize="10" Background="#FFAEAEAE" Width="252" TextWrapping="WrapWithOverflow"/>
+                            <TreeView x:Name="Scenario_Preview_TreeView"/>
                         </ScrollViewer>
                     </Grid>
                     <Grid x:Name="Scenario_Params" HorizontalAlignment="Left" Height="179" VerticalAlignment="Top" Width="203" Margin="286,83,0,0">
