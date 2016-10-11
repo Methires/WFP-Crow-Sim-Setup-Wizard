@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Configuration;
 using Microsoft.Win32;
 using System.Windows.Controls;
@@ -112,14 +113,14 @@ namespace CrowdSimSetupWizard
         }
 
         public WizardWindow(string unityPath, string projectPath)
-        {           
+        {    
+            _noImage = GetNoImage();
             InitializeComponent();
             InitializeData();
             _unityPath = unityPath;
             _project = projectPath;
             _data.Tracking = false;
             _data.BoundingBoxes = true;
-            _noImage = GetNoImage();                       
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -479,8 +480,13 @@ namespace CrowdSimSetupWizard
         private void Scenes_List_Initialized(object sender, EventArgs e)
         {
             GetScenesList();
+            if (Scenes_List.SelectedItem != null)
+            {
+                LoadScenePreviewImage(((SceneFile)Scenes_List.SelectedItem).FileName);
+            }
         }
-         
+
+
         private void GetScenesList()
         {
             if (!UnityProjectExists())
@@ -1093,6 +1099,6 @@ namespace CrowdSimSetupWizard
             }          
         }
 
-       
+
     }
 }
