@@ -189,14 +189,24 @@
                         </Grid>
                         <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">
                             <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top" Margin="0,4,0,0" FontWeight="Bold"/>
-                            <TextBlock x:Name="ScreenWidth_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Width:" VerticalAlignment="Top" Margin="30,25,0,0"/>
-                            <xctk:IntegerUpDown x:Name="Width_Value_Picker" Margin="111,21,10,164" DefaultValue="1920" Minimum="128" Maximum="5120" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
-                            <TextBlock x:Name="ScreenHeight_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Height:" VerticalAlignment="Top" Margin="30,53,0,0"/>
-                            <xctk:IntegerUpDown x:Name="Height_Value_Picker" Margin="111,49,10,136" DefaultValue="1080" Minimum="96" Maximum="2160" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate:" VerticalAlignment="Top" Margin="0,112,0,0"/>
                             <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
                             <xctk:IntegerUpDown x:Name="Buffer_Size_Value_Picker" Margin="111,136,10,49" DefaultValue="500" Minimum="1" Maximum="2000" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <ComboBox x:Name="resolution_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="181" Margin="0,25,0,0" SelectionChanged="resolution_ComboBox_SelectionChanged">
+                                <ComboBoxItem x:Name="resolution_1" Content="800x600"/>
+                                <ComboBoxItem x:Name="resolution_2" Content="1024x768"/>
+                                <ComboBoxItem x:Name="resolution_3" Content="1280x1024"/>
+                                <ComboBoxItem x:Name="resolution_4" Content="1280x720"/>
+                                <ComboBoxItem x:Name="resolution_5" Content="1280x800"/>
+                                <ComboBoxItem x:Name="resolution_6" Content="1366x768"/>
+                                <ComboBoxItem x:Name="resolution_7" Content="1440x900"/>
+                                <ComboBoxItem x:Name="resolution_8" Content="1600x900"/>
+                                <ComboBoxItem x:Name="resolution_9" Content="1600x1200"/>
+                                <ComboBoxItem x:Name="resolution_10" IsSelected="True" Content="1920x1080"/>
+                                <ComboBoxItem x:Name="resolution_11" Content="2560x1440"/>
+                                <ComboBoxItem x:Name="resolution_12" Content="3840x2160"/>
+                            </ComboBox>
                         </Grid>
                     </Grid>
                 </Grid>

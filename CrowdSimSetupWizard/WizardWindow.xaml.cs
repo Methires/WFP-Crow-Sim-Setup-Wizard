@@ -68,8 +68,8 @@ namespace CrowdSimSetupWizard
             //Results
             _data.ResultsPath = _screenshotDirectory;
             _data.BoundingBoxes = false;
-            _data.ScreenWidth = (int)Width_Value_Picker.Value;
-            _data.ScreenHeight = (int)Height_Value_Picker.Value;
+            _data.ScreenWidth = 1980;
+            _data.ScreenHeight = 1080;
             _data.FrameRate = (int)Framerate_Value_Picker.Value;
             _data.BufferSize = (int)Buffer_Size_Value_Picker.Value;
             //Mode
@@ -764,26 +764,19 @@ namespace CrowdSimSetupWizard
             {
                 _data.Repeats = (int)Repeats_Value_Picker.Value;
             }
-            else if(sender.Equals(Width_Value_Picker))
-            {
-                _data.ScreenWidth = (int)Width_Value_Picker.Value;
-            }
-            else if (sender.Equals(Height_Value_Picker))
-            {
-                _data.ScreenHeight = (int)Height_Value_Picker.Value;
-            }
             else if (sender.Equals(Framerate_Value_Picker))
             {
                 _data.FrameRate = (int)Framerate_Value_Picker.Value;
             }
-            //else if (sender.Equals(Scene_Size_Value_Picker))
-            //{
-            //    _data.SceneSize = (int)Scene_Size_Value_Picker.Value;
-            //}
             else if (sender.Equals(Buffer_Size_Value_Picker))
             {
                 _data.BufferSize = (int)Buffer_Size_Value_Picker.Value;
             }
+        }
+
+        private void ValidateResolution()
+        {
+            throw new NotImplementedException();
         }
 
         private void Tracking_CheckBox_Click(object sender, RoutedEventArgs e)
@@ -1093,6 +1086,64 @@ namespace CrowdSimSetupWizard
             }          
         }
 
-       
+        private void resolution_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selection = resolution_ComboBox.SelectedItem as ComboBoxItem;
+            switch (selection.Name)
+            {
+                case "resolution_1":
+                    _data.ScreenWidth = 800;
+                    _data.ScreenHeight = 600;
+                    break;
+                case "resolution_2":
+                    _data.ScreenWidth = 1024;
+                    _data.ScreenHeight = 768;
+                    break;
+                case "resolution_3":
+                    _data.ScreenWidth = 1280;
+                    _data.ScreenHeight = 1024;
+                    break;
+                case "resolution_4":
+                    _data.ScreenWidth = 1280;
+                    _data.ScreenHeight = 720;
+                    break;
+                case "resolution_5":
+                    _data.ScreenWidth = 1280;
+                    _data.ScreenHeight = 800;
+                    break;
+                case "resolution_6":
+                    _data.ScreenWidth = 1366;
+                    _data.ScreenHeight = 768;
+                    break;
+                case "resolution_7":
+                    _data.ScreenWidth = 1440;
+                    _data.ScreenHeight = 900;
+                    break;
+                case "resolution_8":
+                    _data.ScreenWidth = 1600;
+                    _data.ScreenHeight = 900;
+                    break;
+                case "resolution_9":
+                    _data.ScreenWidth = 1600;
+                    _data.ScreenHeight = 1200;
+                    break;
+                case "resolution_10":
+                    _data.ScreenWidth = 1920;
+                    _data.ScreenHeight = 1080;
+                    break;
+                case "resolution_11":
+                    _data.ScreenWidth = 2560;
+                    _data.ScreenHeight = 1440;
+                    break;
+                case "resolution_12":
+                    _data.ScreenWidth = 3840;
+                    _data.ScreenHeight = 2160;
+                    break;
+                default:
+                    _data.ScreenWidth = 1920;
+                    _data.ScreenHeight = 1080;
+                    break;
+            }
+        }
     }
 }
