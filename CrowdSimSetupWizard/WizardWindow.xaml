@@ -25,7 +25,7 @@
                             </Grid>
 
                             <ScrollViewer x:Name="Scenes_ScrollView" Margin="0,0,246,60" CanContentScroll="True">
-                                <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized">
+                                <ListBox x:Name="Scenes_List" Initialized="Scenes_List_Initialized" IsSynchronizedWithCurrentItem="True">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <RadioButton Content="{Binding FileName}" IsChecked="{Binding IsFirst}" GroupName="FakoGroup"  Checked="Scene_List_Checked"/>
@@ -33,7 +33,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </ScrollViewer>
-                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,93,171,0" VerticalAlignment="Top" Width="65" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
+                            <Button x:Name="Generate_Scene_Button" Content="Generate" HorizontalAlignment="Right" Margin="0,77,171,0" VerticalAlignment="Top" Width="70" IsEnabled="True" Click="Generate_Scene_Button_Click"/>
                             <!--ScenePreview was here-->
                             <Grid x:Name="Crowd_Size" HorizontalAlignment="Left" Height="55" VerticalAlignment="Bottom" Width="379">
                                 <Slider x:Name="Crowd_Size_Slider" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="310" Minimum="1" Maximum="500" Value="1" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="Crowd_Size_Slider_ValueChanged"/>
