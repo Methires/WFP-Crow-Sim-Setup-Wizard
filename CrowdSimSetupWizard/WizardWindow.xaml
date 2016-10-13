@@ -156,7 +156,7 @@
                         <TextBlock x:Name="Repeats_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Repeat scenario:" VerticalAlignment="Top" Margin="10,42,0,0"/>
                         <xctk:IntegerUpDown x:Name="Repeats_Value_Picker" Margin="148,38,10,118" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" MouseWheelActiveOnFocus="False" ValueChanged="Value_Picker_ValueChanged"/>
                         <TextBlock x:Name="Tracking_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Only tracking:" VerticalAlignment="Top" Margin="10,125,0,0"/>
-                        <TextBlock x:Name="Length_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Session length:" VerticalAlignment="Top" Margin="10,150,0,0"/>
+                        <TextBlock x:Name="Length_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Session length [s]:" VerticalAlignment="Top" Margin="10,150,0,0"/>
                         <xctk:IntegerUpDown x:Name="Length_Value_Picker" Margin="148,146,10,10" DefaultValue="1" Minimum="1" DisplayDefaultValueOnEmptyText="True" IsReadOnly="True" ValueChanged="Value_Picker_ValueChanged"/>
                         <CheckBox x:Name="Tracking_CheckBox"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="148,126,0,0" IsChecked ="False" Click="Tracking_CheckBox_Click"/>
                     </Grid>
@@ -189,9 +189,9 @@
                         </Grid>
                         <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">
                             <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top" Margin="0,4,0,0" FontWeight="Bold"/>
-                            <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate:" VerticalAlignment="Top" Margin="0,112,0,0"/>
+                            <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate [Hz]:" VerticalAlignment="Top" Margin="0,112,0,0"/>
                             <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
-                            <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
+                            <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Images buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
                             <xctk:IntegerUpDown x:Name="Buffer_Size_Value_Picker" Margin="111,136,10,49" DefaultValue="500" Minimum="1" Maximum="2000" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <ComboBox x:Name="resolution_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="181" Margin="0,25,0,0" SelectionChanged="resolution_ComboBox_SelectionChanged">
                                 <ComboBoxItem x:Name="resolution_1" Content="800x600"/>
