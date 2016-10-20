@@ -190,7 +190,7 @@
                         <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">
                             <TextBlock x:Name="Resolution_Setup_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Resolution:" VerticalAlignment="Top" Margin="0,4,0,0" FontWeight="Bold"/>
                             <TextBlock x:Name="Framerate_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frame rate [Hz]:" VerticalAlignment="Top" Margin="0,112,0,0"/>
-                            <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="15" Maximum="240" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
+                            <xctk:IntegerUpDown x:Name="Framerate_Value_Picker" Margin="111,108,10,77" DefaultValue="24" Minimum="5" Maximum="60" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <TextBlock x:Name="Buffer_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Images buffer size:" VerticalAlignment="Top" Margin="0,140,0,0"/>
                             <xctk:IntegerUpDown x:Name="Buffer_Size_Value_Picker" Margin="111,136,10,49" DefaultValue="500" Minimum="1" Maximum="2000" DisplayDefaultValueOnEmptyText="True" ValueChanged="Value_Picker_ValueChanged"/>
                             <ComboBox x:Name="resolution_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="181" Margin="0,25,0,0" SelectionChanged="resolution_ComboBox_SelectionChanged">

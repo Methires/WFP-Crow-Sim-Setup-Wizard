@@ -977,7 +977,6 @@ namespace CrowdSimSetupWizard
             statusValueLabel.Foreground = System.Windows.Media.Brushes.DarkOrange;
             _screenshotDirInfo = EarliestDirectory();
             memValueLabel.Content = GetUnityMemoryUsage() + " MB";
-
             if (_screenshotDirInfo != null)
             {
                 repeatsValueabel.Content = SubdirectoriesCount(_screenshotDirInfo).ToString();
@@ -996,7 +995,8 @@ namespace CrowdSimSetupWizard
                 var mem = unityProcessess[0].WorkingSet64;
                 memUsage = (int)(mem / 1048576);
             }
-
+            List<string> a = new List<string> { string.Format("{0} RAM:{1}MB", DateTime.Now, memUsage) };
+            File.AppendAllLines(string.Format("log.txt"), a);
             return memUsage;
         }
 
