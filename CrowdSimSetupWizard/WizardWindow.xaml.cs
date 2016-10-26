@@ -823,7 +823,7 @@ namespace CrowdSimSetupWizard
             }
         }
 
-        private bool? IsLastPageAvaiable()
+        private bool IsLastPageAvaiable()
         {
             if (Results_Path.Text == _data.ResultsPath)
             {
@@ -841,10 +841,6 @@ namespace CrowdSimSetupWizard
             {
                 Results_Path.Text = _screenshotDirectory;
                 _data.ResultsPath = _screenshotDirectory;
-                ResultsPage.CanSelectNextPage = true;
-            }
-            else
-            {
                 ResultsPage.CanSelectNextPage = false;
             }
         }
