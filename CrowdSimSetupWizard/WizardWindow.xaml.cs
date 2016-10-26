@@ -40,7 +40,7 @@ namespace CrowdSimSetupWizard
             public int Instances;
             //Results
             public string ResultsPath;
-            public bool BoundingBoxes;
+            public int BoundingBoxes;
             public int ScreenWidth;
             public int ScreenHeight;
             public int FrameRate;
@@ -68,7 +68,7 @@ namespace CrowdSimSetupWizard
             _data.Instances = (int)Instances_Value_Picker.Value;          
             //Results
             _data.ResultsPath = _screenshotDirectory;
-            _data.BoundingBoxes = false;
+            _data.BoundingBoxes = 0;
             _data.ScreenWidth = 1980;
             _data.ScreenHeight = 1080;
             _data.FrameRate = (int)Framerate_Value_Picker.Value;
@@ -93,7 +93,6 @@ namespace CrowdSimSetupWizard
         private string _screenshotDirectory = AppDomain.CurrentDomain.BaseDirectory + "Screenshots";
         private DirectoryInfo _screenshotDirInfo;
         private BackgroundWorker _bw;
-        private bool _simulationComplete = false;
         private DateTime _simulationStart;
 
         private bool _unityProjectExists = false;
@@ -120,7 +119,7 @@ namespace CrowdSimSetupWizard
             _unityPath = unityPath;
             _project = projectPath;
             _data.Tracking = false;
-            _data.BoundingBoxes = true;
+            _data.BoundingBoxes = 0;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -820,8 +819,20 @@ namespace CrowdSimSetupWizard
                 Results_Path.Text = _data.ResultsPath;
 
                 //ResultsPage.CanFinish = true;
-                ResultsPage.CanSelectNextPage = true;
+                ResultsPage.CanSelectNextPage = IsLastPageAvaiable();
             }
+        }
+
+        private bool? IsLastPageAvaiable()
+        {
+            if (Results_Path.Text == _data.ResultsPath)
+            {
+                if ((bool)checkBox_ResultType1.IsChecked || (bool)checkBox_ResultType2.IsChecked)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void Results_Path_Initialized(object sender, EventArgs e)
@@ -835,18 +846,6 @@ namespace CrowdSimSetupWizard
             else
             {
                 ResultsPage.CanSelectNextPage = false;
-            }
-        }
-
-        private void Results_Type_Checked(object sender, RoutedEventArgs e)
-        {
-            if (sender.Equals(Type_Sequences))
-            {
-                _data.BoundingBoxes = false;
-            }
-            else if (sender.Equals(Type_Sequences_Boxes))
-            {
-                _data.BoundingBoxes = true;
             }
         }
 
@@ -921,7 +920,6 @@ namespace CrowdSimSetupWizard
             SummaryPage.CanSelectPreviousPage = false;
 
             _unityKilled = false;
-            _simulationComplete = false;
 
             ResetInfo();
             InitializeUnityMonitor();
@@ -1011,7 +1009,6 @@ namespace CrowdSimSetupWizard
         {
             startButton.IsEnabled = true;
             abortSimButton.IsEnabled = false;
-            _simulationComplete = true;
             SummaryPage.CanFinish = true;
             SummaryPage.CanSelectPreviousPage = true;
         }
@@ -1145,6 +1142,60 @@ namespace CrowdSimSetupWizard
                     _data.ScreenHeight = 1080;
                     break;
             }
+        }
+
+        private void checkBox_ResultType1_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)checkBox_ResultType1.IsChecked)
+            {
+                if ((bool)checkBox_ResultType2.IsChecked)
+                {
+                    _data.BoundingBoxes = 3;
+                }
+                else
+                {
+                    _data.BoundingBoxes = 1;
+                }
+            }
+            else
+            {
+                if ((bool)checkBox_ResultType2.IsChecked)
+                {
+                    _data.BoundingBoxes = 2;
+                }
+                else
+                {
+                    _data.BoundingBoxes = 0;
+                }
+            }
+            ResultsPage.CanSelectNextPage = IsLastPageAvaiable();
+        }
+
+        private void checkBox_ResultType2_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)checkBox_ResultType2.IsChecked)
+            {
+                if ((bool)checkBox_ResultType1.IsChecked)
+                {
+                    _data.BoundingBoxes = 3;
+                }
+                else
+                {
+                    _data.BoundingBoxes = 2;
+                }
+            }
+            else
+            {
+                if ((bool)checkBox_ResultType1.IsChecked)
+                {
+                    _data.BoundingBoxes = 1;
+                }
+                else
+                {
+                    _data.BoundingBoxes = 0;
+                }
+            }
+            ResultsPage.CanSelectNextPage = IsLastPageAvaiable();
         }
     }
 }

@@ -183,8 +183,12 @@
                         <Grid x:Name="Results_Type_Choice" HorizontalAlignment="Left" Height="198" VerticalAlignment="Top" Width="213" Margin="10,0,0,0">
                             <TextBlock x:Name="Results_Type_Header" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Results type:" VerticalAlignment="Top"/>
                             <StackPanel x:Name="Results_Type_List" HorizontalAlignment="Left" Height="167" Margin="10,21,0,0" VerticalAlignment="Top" Width="193">
+                                <CheckBox x:Name="checkBox_ResultType1" Content="Raw sequences" Click="checkBox_ResultType1_Click"/>
+                                <CheckBox x:Name="checkBox_ResultType2" Content="Sequences with bounding boxes" Click="checkBox_ResultType2_Click"/>
+                                <!--                        
                                 <RadioButton x:Name="Type_Sequences" Content="Raw sequences" Checked="Results_Type_Checked"/>
                                 <RadioButton x:Name="Type_Sequences_Boxes" Content="Sequences with bounding boxes" IsChecked="True" Checked="Results_Type_Checked"/>
+                                -->
                             </StackPanel>
                         </Grid>
                         <Grid x:Name="Resolution_Setup" HorizontalAlignment="Left" Height="208" Margin="298,0,0,0" VerticalAlignment="Top" Width="191">

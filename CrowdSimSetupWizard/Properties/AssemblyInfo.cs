@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CrowdSimSetupWizard")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PJATK - Crowd Action and Tracking Simulator")]
+[assembly: AssemblyDescription("Wizard for setting and starting up Unity 3D based simulation.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CrowdSimSetupWizard")]
+[assembly: AssemblyCompany("PJATK - Bytom. Made by: Daniel Fernes, Maciej Blady, Lukasz Kandziora")]
+[assembly: AssemblyProduct("Crowd Simulator Wizard")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -256,7 +256,7 @@ namespace CrowdSimSetupWizard
                     {
                         if (!actorChecker[j])
                         {
-                            throw new ScenarioException(string.Format("Level {0} doesn't contain any action for {1}.", i, actorNames[j]));
+                            throw new ScenarioException(string.Format("Level {0} doesn't contain any action for {1}. If you want {1} to wait, add action \"Walk\" or \"Run\"", i, actorNames[j]));
                         }
                     }
                 }
@@ -406,7 +406,7 @@ namespace CrowdSimSetupWizard
             }
             if (levelId == 0 && probability != 1.0f)
             {
-                throw new ScenarioException(string.Format("Actions' probability for {0} isn't equal 1. Check level number {1}.", actorName, levelId));
+                throw new ScenarioException(string.Format("Actions' probability for {0} isn't equal 1. Check level number {1}. Add \"Walk\" or \"Run\", if you want {0} to wait.", actorName, levelId));
             }
             foreach (int id in previousId)
             {
@@ -434,7 +434,6 @@ namespace CrowdSimSetupWizard
             }
         }
 
-        //NOT TESTED!
         public bool ValidateGeneratedScenario(List<Level> levels, List<string> actorsNames, out string status)
         {
             try
