@@ -482,6 +482,7 @@ namespace CrowdSimSetupWizard
             if (Scenes_List.SelectedItem != null)
             {
                 LoadScenePreviewImage(((SceneFile)Scenes_List.SelectedItem).FileName);
+               // _data.SceneName = Scenes_List.SelectedItem;
             }
         }
 
@@ -512,6 +513,7 @@ namespace CrowdSimSetupWizard
                 if (newScene.IsFirst)
                 {
                     LoadScenePreviewImage(newScene.FileName);
+                    _data.SceneName = newScene.FileName;
                 }
 
                 _scenes.Add(newScene);
@@ -847,6 +849,8 @@ namespace CrowdSimSetupWizard
 
         private void PrepareConfigFile()
         {
+            var selectedItem = Scenes_List.SelectedItem as SceneFile;
+            _data.SceneName = selectedItem.FileName;
             _data.Models = _modelsFilter.ToString();
             _data.CrowdActions = _actionsFilter.ToString();
             string configPath = _project + "\\Assets\\config.xml";
@@ -907,6 +911,7 @@ namespace CrowdSimSetupWizard
             PrepareConfigFile();
 
             string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
+            //string command = string.Format(" -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
             Process.Start(_unityPath, command);
 
             abortSimButton.IsEnabled = true;
