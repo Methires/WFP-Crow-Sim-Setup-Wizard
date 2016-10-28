@@ -232,10 +232,10 @@ namespace CrowdSimSetupWizard
                 }
                 else
                 {
-                    if (GetActorNames(levels[i]).Count != actorNames.Count)
-                    {
-                        throw new ScenarioException(string.Format("Level {0} contains previously undefined actor.", i));
-                    }
+                    //if (GetActorNames(levels[i]).Count != actorNames.Count)
+                    //{
+                    //    throw new ScenarioException(string.Format("Level {0} contains previously undefined actor.", i));
+                    //}
 
                     bool[] actorChecker = new bool[actorNames.Count];
                     for (int j = 0; j < levels[i].Actions.Count; j++)

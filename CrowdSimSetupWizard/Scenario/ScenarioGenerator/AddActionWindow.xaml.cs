@@ -134,12 +134,36 @@ namespace CrowdSimSetupWizard
                     }
                     action.Actors.Add(actor);
                 }
+                CheckMocapId();
                 Generator.AddNewActionToLevel(action);
                 Close();
             }
             catch (ScenarioException ScException)
             {
                 MessageBox.Show(ScException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CheckMocapId()
+        {
+            if (Actors_TreeView.Items.Count > 1)
+            {
+                HashSet<string> mocapIds = new HashSet<string>();
+                foreach (TreeViewItem actorItem in Actors_TreeView.Items)
+                {
+                    if (actorItem.Items.Count != 0)
+                    {
+                        if (!_selectedName.Equals("Walk") && !_selectedName.Equals("Run"))
+                        {
+                            ComboBox mocapIdCb = actorItem.Items[0] as ComboBox;
+                             mocapIds.Add(mocapIdCb.SelectedItem as string);
+                        }
+                    }
+                }
+                if (mocapIds.Count != Actors_TreeView.Items.Count)
+                {
+                    throw new ScenarioException(string.Format("Choose different Mocap indexes for each agent."));
+                } 
             }
         }
 
