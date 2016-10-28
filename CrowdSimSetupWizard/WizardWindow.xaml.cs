@@ -81,8 +81,12 @@ namespace CrowdSimSetupWizard
 
         private static ConfigData _data;
         private List<AnimationFile> _animations;
+
         private List<ModelFile> _models;
+
         private List<SceneFile> _scenes;
+
+
         private string _path = AppDomain.CurrentDomain.BaseDirectory;
         private string _unityPath = "C:\\Program Files\\Unity\\Editor\\Unity.exe";
         private string _project = AppDomain.CurrentDomain.BaseDirectory + "UnityCrowdSimAndGenerator";
@@ -108,6 +112,32 @@ namespace CrowdSimSetupWizard
             set
             {
                 _unityPath = value;
+            }
+        }
+
+        public List<ModelFile> Models
+        {
+            get
+            {
+                return _models;
+            }
+
+            set
+            {
+                _models = value;
+            }
+        }
+
+        internal List<SceneFile> Scenes
+        {
+            get
+            {
+                return _scenes;
+            }
+
+            set
+            {
+                _scenes = value;
             }
         }
 
@@ -375,15 +405,20 @@ namespace CrowdSimSetupWizard
 
         private void Models_CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.CheckBox model = sender as System.Windows.Controls.CheckBox;            
-            if ((bool)model.IsChecked)
+            var checkBox = sender as System.Windows.Controls.CheckBox;
+            var item = checkBox.DataContext;
+            Models_List.SelectedItem = item;
+
+            if ((bool)checkBox.IsChecked)
             {
-                _modelsFilter.Append("|" + model.Content);
+                _modelsFilter.Append("|" + checkBox.Content);
             }
             else
             {
-                _modelsFilter.Replace("|" + model.Content, string.Empty);
+                _modelsFilter.Replace("|" + checkBox.Content, string.Empty);
             }
+
+            LoadModelPreviewImage(checkBox.Content.ToString());
         }
 
         private void Load_Scene_Button_Click(object sender, RoutedEventArgs e)
@@ -416,7 +451,7 @@ namespace CrowdSimSetupWizard
 
         private void Generate_Scene_Button_Click(object sender, RoutedEventArgs e)
         {
-            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
+            string command = string.Format(" -batchmode -projectPath \"{0}\" -executeMethod Preparer.PrepareSimulation", _project);
             _data.Mode = "generation";
             PrepareConfigFile();           
             Process.Start(_unityPath, command);
@@ -437,7 +472,7 @@ namespace CrowdSimSetupWizard
                 Directory.CreateDirectory(Path.GetDirectoryName(destPath));
                 File.Copy(dlg.FileName, destPath);
 
-                string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
+                string command = string.Format(" -batchmode -projectPath \"{0}\" -executeMethod Preparer.CloseAfterImporting", _project);
                 Process.Start(_unityPath, command);
                 System.Action refresh = () => GetModelsList();
                 WaitForUnity(ModelsBusyIndicator, "Importing model...", ModelsPage, refresh);               
@@ -597,7 +632,7 @@ namespace CrowdSimSetupWizard
                     string destPath = _project + "\\Assets\\Resources\\Animations\\" + Path.GetFileName(dlg.FileName);
                     File.Copy(dlg.FileName, destPath, true);
 
-                    string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.CloseAfterImporting", _project);
+                    string command = string.Format(" -batchmode -projectPath \"{0}\" -executeMethod Preparer.CloseAfterImporting", _project);
                     Process.Start(_unityPath, command);
 
                     System.Action refresh = () => GetAnimationsList();
@@ -910,7 +945,7 @@ namespace CrowdSimSetupWizard
             _data.Mode = "simulation";           
             PrepareConfigFile();
 
-            string command = string.Format(" -batchmode -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
+            string command = string.Format(" -batchmode -projectPath \"{0}\" -executeMethod Preparer.PrepareSimulation", _project);
             //string command = string.Format(" -projectPath {0} -executeMethod Preparer.PrepareSimulation", _project);
             Process.Start(_unityPath, command);
 
@@ -952,7 +987,7 @@ namespace CrowdSimSetupWizard
 
         private void showInExplorerButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(_screenshotDirectory);
+            Process.Start(string.Format("\"{0}\"",_screenshotDirectory));
         }
 
         //public delegate void MonitorDelegate();
@@ -1197,6 +1232,15 @@ namespace CrowdSimSetupWizard
                 }
             }
             ResultsPage.CanSelectNextPage = IsLastPageAvaiable();
+        }
+
+        private void Models_List_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as System.Windows.Controls.ListBox;
+            var selectedItem = listBox.SelectedItem as System.Windows.Controls.ListBoxItem;
+            
+            //LoadModelPreviewImage(selectedItem.Content.ToString());
+
         }
     }
 }
