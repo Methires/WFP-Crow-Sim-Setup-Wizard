@@ -53,7 +53,7 @@ namespace CrowdSimSetupWizard
 
         private void InitializeData()
         {
-            _data.SceneName = "";
+            _data.SceneName = ((SceneFile)Scenes_List.SelectedItem).FileName;
             _data.DayTime = 1;
             _data.WeatherConditions = 1;
             //Crowd
@@ -68,7 +68,7 @@ namespace CrowdSimSetupWizard
             _data.Instances = (int)Instances_Value_Picker.Value;          
             //Results
             _data.ResultsPath = _screenshotDirectory;
-            _data.BoundingBoxes = 0;
+            _data.BoundingBoxes = 2;
             _data.ScreenWidth = 1980;
             _data.ScreenHeight = 1080;
             _data.FrameRate = (int)Framerate_Value_Picker.Value;
@@ -128,7 +128,7 @@ namespace CrowdSimSetupWizard
             }
         }
 
-        internal List<SceneFile> Scenes
+        public List<SceneFile> Scenes
         {
             get
             {
@@ -149,7 +149,7 @@ namespace CrowdSimSetupWizard
             _unityPath = unityPath;
             _project = projectPath;
             _data.Tracking = false;
-            _data.BoundingBoxes = 0;
+            //_data.BoundingBoxes = 0;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -257,8 +257,12 @@ namespace CrowdSimSetupWizard
 
         private void Scene_List_Checked(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.RadioButton action = sender as System.Windows.Controls.RadioButton;
-            string sceneName = action.Content.ToString();
+            var radioButton = sender as System.Windows.Controls.RadioButton;
+            var item = radioButton.DataContext;
+
+            Scenes_List.SelectedItem = item;
+
+            string sceneName = radioButton.Content.ToString();
             _data.SceneName = sceneName;
             LoadScenePreviewImage(sceneName);
         }
@@ -407,6 +411,7 @@ namespace CrowdSimSetupWizard
         {
             var checkBox = sender as System.Windows.Controls.CheckBox;
             var item = checkBox.DataContext;
+
             Models_List.SelectedItem = item;
 
             if ((bool)checkBox.IsChecked)
@@ -514,11 +519,6 @@ namespace CrowdSimSetupWizard
         private void Scenes_List_Initialized(object sender, EventArgs e)
         {
             GetScenesList();
-            if (Scenes_List.SelectedItem != null)
-            {
-                LoadScenePreviewImage(((SceneFile)Scenes_List.SelectedItem).FileName);
-               // _data.SceneName = Scenes_List.SelectedItem;
-            }
         }
 
 
@@ -554,6 +554,7 @@ namespace CrowdSimSetupWizard
                 _scenes.Add(newScene);
             }
             Scenes_List.ItemsSource = _scenes;
+            Scenes_List.SelectedItem = _scenes.FirstOrDefault();
         }
 
         private void GetAnimationsList()
@@ -871,7 +872,7 @@ namespace CrowdSimSetupWizard
             }
             return false;
         }
-
+     
         private void Results_Path_Initialized(object sender, EventArgs e)
         {
             if (Directory.Exists(_screenshotDirectory))
@@ -1030,7 +1031,7 @@ namespace CrowdSimSetupWizard
                 memUsage = (int)(mem / 1048576);
             }
             List<string> a = new List<string> { string.Format("{0} RAM:{1}MB", DateTime.Now, memUsage) };
-            File.AppendAllLines(string.Format("log.txt"), a);
+            //File.AppendAllLines(string.Format("log.txt"), a);
             return memUsage;
         }
 
@@ -1237,10 +1238,26 @@ namespace CrowdSimSetupWizard
         private void Models_List_Selected(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as System.Windows.Controls.ListBox;
-            var selectedItem = listBox.SelectedItem as System.Windows.Controls.ListBoxItem;
-            
-            //LoadModelPreviewImage(selectedItem.Content.ToString());
+            var selectedItem = listBox.SelectedItem as ModelFile;
+            if (selectedItem == null)
+            {
+                selectedItem = _models.FirstOrDefault();
+                listBox.SelectedItem = selectedItem;
+            }      
+            LoadModelPreviewImage(selectedItem.ModelName);
+        }
 
+        private void Scenes_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as System.Windows.Controls.ListBox;
+            var selectedItem = listBox.SelectedItem as SceneFile;
+
+            LoadScenePreviewImage(selectedItem.FileName);
+        }
+
+        private void ResultsPage_Initialized(object sender, EventArgs e)
+        {          
+            ResultsPage.CanSelectNextPage = IsLastPageAvaiable();
         }
     }
 }
