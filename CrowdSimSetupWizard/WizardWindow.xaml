@@ -242,11 +242,13 @@
                         <Label x:Name="framesCountLabel" Content="Frames count:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="repeatsLabel" Content="Repeats:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="memLabel" Content="Memory used:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"/>
+                        <Label x:Name="sizeLabel" Content="Result folder size:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top"/>
 
                         <Label x:Name="memValueLabel" Content="0 MB" Grid.Column="1" HorizontalAlignment="Left" Margin="129,93,0,0" VerticalAlignment="Top"/>
                         <Label x:Name="statusValueLabel" Content="Ready" Grid.Column="1" HorizontalAlignment="Left" Margin="129,10,0,0" VerticalAlignment="Top" Width="120" />
                         <Label x:Name="framesCountValueLabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,41,0,0" VerticalAlignment="Top" Width="120"/>
                         <Label x:Name="repeatsValueabel" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="129,67,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Label x:Name="sizeValueabel" Content="0 B" Grid.Column="1" HorizontalAlignment="Left" Margin="129,119,0,0" VerticalAlignment="Top" Width="120"/>
                     </Grid>
                 </xctk:BusyIndicator>
             </xctk:WizardPage>

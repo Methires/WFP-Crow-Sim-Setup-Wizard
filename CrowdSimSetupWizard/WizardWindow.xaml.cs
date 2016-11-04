@@ -1012,6 +1012,7 @@ namespace CrowdSimSetupWizard
             statusValueLabel.Foreground = System.Windows.Media.Brushes.DarkOrange;
             _screenshotDirInfo = EarliestDirectory();
             memValueLabel.Content = GetUnityMemoryUsage() + " MB";
+            sizeValueabel.Content = GetDirectorySize(_screenshotDirInfo);
             if (_screenshotDirInfo != null)
             {
                 repeatsValueabel.Content = SubdirectoriesCount(_screenshotDirInfo).ToString();
@@ -1019,6 +1020,45 @@ namespace CrowdSimSetupWizard
                 framesCountValueLabel.Content = ScreenshotCount(earliestRepeat);                
                 GeneratedFilesTextBlock.Text = GetFilesList(earliestRepeat);
             }            
+        }
+
+        private string GetDirectorySize(DirectoryInfo dirInfo)
+        {
+            DirectoryInfo DirInfo = dirInfo;
+            Stopwatch sw = new Stopwatch();
+            try
+            {
+                sw.Start();
+                long ttl = 0;
+                int fileCount = 0;
+                foreach (FileInfo fi in DirInfo.EnumerateFiles("*", SearchOption.AllDirectories))
+                {
+                    ttl += fi.Length;
+                    fileCount++;
+                }
+                sw.Stop();
+                if (ttl >= 1024 && ttl < 1048576)
+                {
+                    float size = (float)ttl / 1024.0f;
+                    return string.Format("{0:0.00} KB", size);
+                }
+                else if (ttl >= 1048576 && ttl < 1073741824)
+                {
+                    float size = (float)ttl / 1048576.0f;
+                    return string.Format("{0:0.00} MB", size);
+                }
+                else if (ttl >= 1073741824)
+                {
+                    float size = (float)ttl / 1073741824.0f;
+                    return string.Format("{0:0.00} GB", size);
+                }
+                return string.Format("{0} B", ttl);
+
+            }
+            catch (Exception Ex)
+            {
+                return "0 B";
+            }
         }
 
         private int GetUnityMemoryUsage()
