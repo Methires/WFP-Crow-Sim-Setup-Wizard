@@ -172,6 +172,7 @@ namespace CrowdSimSetupWizard
                             CheckActionsForActor(GetActorsActions(levels[i], actor), null, actor, i);
                         }
                     }
+                    CheckLevelCoherence(levels[i]);
                 }
 
                 levelList = levels;
@@ -453,6 +454,7 @@ namespace CrowdSimSetupWizard
                             CheckActionsForActor(GetActorsActions(levels[i], actor), null, actor, i);
                         }
                     }
+                    CheckLevelCoherence(levels[i]);
                 }
                 status = "Validated.";
                 return true;
@@ -471,6 +473,52 @@ namespace CrowdSimSetupWizard
                 if (level.Actions.Count == 0)
                 {
                     throw new ScenarioException(string.Format("Level cannot be empty. Check level number {0}", levels.IndexOf(level)));
+                }
+            }
+        }
+
+        private void CheckLevelCoherence(Level level)
+        {
+            Level temp = level;
+            HashSet<string> actors = new HashSet<string>();
+            foreach (Action action in temp.Actions)
+            {
+                foreach (Actor actor in action.Actors)
+                {
+                    actors.Add(actor.Name);
+                }
+            }
+            
+            foreach (Action action in temp.Actions)
+            {
+                List<Action> otherActions = temp.Actions;
+                List<string> actorsNotInAction = actors.ToList();
+                List<string> actorsInAction = new List<string>();
+                foreach (Actor actor in action.Actors)
+                {
+                    actorsNotInAction.Remove(actor.Name);
+                    actorsInAction.Add(actor.Name);
+                }
+                foreach (Action otherAction in otherActions)
+                {
+                    if (otherAction == action)
+                    {
+                        continue;
+                    }
+                    foreach (Actor actor in otherAction.Actors)
+                    {
+                        if (actorsNotInAction.Contains(actor.Name))
+                        {
+                            if (otherAction.Actors.Count > 1)
+                            {
+                                var test = otherAction.Actors.Where(x => actorsInAction.Contains(x.Name)).ToList();
+                                if (test.Count > 0)
+                                {
+                                    throw new ScenarioException(string.Format("In some cases action number {0} in level number {1} will be inaccessible. Check level number {1}.", otherAction.Index, level.Index));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
